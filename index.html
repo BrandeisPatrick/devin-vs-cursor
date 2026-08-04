@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devin vs Cursor: A Technical Comparison</title>
+<meta name="description" content="Two opposite bets on how an AI should understand your codebase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&family=Inter:wght@400;500&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F6F5; --surface:#fff; --ink:#000; --ink-btn:#191919;
+  --ink2:rgba(25,25,25,.56); --accent:#2200FF; --hair:rgba(0,0,0,.06);
+  --serif:"Source Serif 4",Georgia,serif;
+  --sans:"Inter",system-ui,-apple-system,sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --blue:#317cff; --orange:#f58e3a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.page{max-width:1440px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:200px minmax(0,1fr);gap:64px;border-left:1px solid var(--hair);border-right:1px solid var(--hair)}
+/* ---------- sidebar ---------- */
+.side{padding-top:40px}
+.side-inner{position:sticky;top:40px;display:flex;flex-direction:column;gap:28px}
+.wordmark{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:-.12px;color:var(--ink);line-height:1.4}
+.wordmark:hover{text-decoration:none}
+.side nav{display:flex;flex-direction:column;gap:8px}
+.side nav a{font-family:var(--sans);font-size:15px;line-height:1.3;color:var(--ink)}
+.side nav a:hover{color:var(--accent);text-decoration:none}
+.side nav a.active{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 8px;border:1px solid var(--ink);font-family:var(--sans);font-size:13px;color:var(--ink-btn);width:fit-content;transition:background .12s,color .12s}
+.btn:hover{background:var(--ink-btn);color:var(--paper);text-decoration:none}
+/* ---------- article ---------- */
+article{max-width:880px;padding-top:120px;padding-bottom:96px}
+.hero{width:100%;aspect-ratio:1.5073;overflow:hidden;margin-bottom:40px}
+.hero canvas{width:100%;height:100%;display:block}
+h1{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1.2;letter-spacing:-.02em;max-width:612px}
+.subtitle{font-family:var(--serif);font-weight:300;font-size:20px;line-height:1.35;letter-spacing:-.01em;color:var(--ink2);margin-top:10px;max-width:612px}
+.meta{font-family:var(--mono);font-size:12px;line-height:1.3;letter-spacing:-.12px;color:var(--ink2);margin-top:20px;display:flex;gap:24px;flex-wrap:wrap}
+.postheader{border-bottom:1px solid var(--hair);padding-bottom:24px;margin-bottom:24px}
+.prose{max-width:612px}
+p{font-size:15px;line-height:1.5;margin-bottom:12px}
+h2{font-family:var(--sans);font-weight:400;font-size:22px;line-height:1.3;margin-top:32px;margin-bottom:8px;scroll-margin-top:32px}
+h2 .anchor{margin-left:8px;color:var(--ink2);opacity:0;transition:opacity .12s}
+h2:hover .anchor{opacity:.5}
+strong{font-weight:600}
+ul.plain{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+ul.plain li{font-size:15px;line-height:1.5;padding-left:16px;position:relative}
+ul.plain li::before{content:"–";position:absolute;left:0;color:var(--ink2)}
+.small-note{font-family:var(--mono);font-size:12px;color:var(--ink2);letter-spacing:-.12px}
+/* ---------- figures ---------- */
+figure{margin:32px 0}
+figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.fig-note{font-family:var(--mono);font-size:11px;color:var(--ink2);margin-top:6px;letter-spacing:-.12px}
+.chart-svg{width:100%;height:auto;display:block}
+.chart-svg .axis{stroke:#000;stroke-opacity:.1;stroke-width:1.2}
+.chart-svg .axlabel{font-family:var(--sans);font-size:10px;fill:#191919;fill-opacity:.56}
+.chart-svg .val{font-family:var(--mono);font-size:11px;font-weight:500;fill:#191919}
+.chart-svg .series{font-family:var(--sans);font-size:11px;font-weight:500}
+.chart-svg .rowlab{font-family:var(--sans);font-size:12px;fill:#191919}
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto;margin:32px 0}
+table{border-collapse:collapse;min-width:640px;width:100%}
+thead th{font-family:var(--sans);font-size:13px;font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.18);color:var(--ink)}
+thead th.hl{color:var(--accent)}
+tbody td,tbody th{padding:10px 12px;border-bottom:1px solid var(--hair);vertical-align:top;text-align:left}
+tbody th{font-family:var(--serif);font-weight:600;font-size:15px;white-space:nowrap}
+tbody td{font-family:var(--serif);font-size:14px;line-height:1.45}
+td.num{font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
+col.hl{background:rgba(34,0,255,.05)}
+.tfoot{font-family:var(--sans);font-size:12px;color:var(--ink2);border-top:1px solid var(--hair);padding-top:14px;margin-top:0}
+/* ---------- references ---------- */
+.refs{list-style:none;display:flex;flex-direction:column;gap:6px;max-width:612px}
+.refs li{font-size:13px;color:var(--ink2);line-height:1.45}
+.refs .n{font-family:var(--mono);font-variant-numeric:tabular-nums;margin-right:8px}
+/* ---------- footer ---------- */
+footer{grid-column:1/-1;border-top:1px solid var(--hair);padding:32px 0 96px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--sans);font-size:13px;color:var(--ink2)}
+footer a{color:var(--ink2)}
+footer a:hover{color:var(--accent);text-decoration:none}
+@media (max-width:900px){
+  .page{grid-template-columns:1fr;padding:0 20px;gap:0}
+  .side{padding-top:24px}
+  .side-inner{position:static;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .side nav{display:none}
+  article{padding-top:40px}
+  h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <aside class="side">
+    <div class="side-inner">
+      <a class="wordmark" href="#top">DEVIN×CURSOR<br><span style="color:var(--ink2)">/eval-lab</span></a>
+      <nav>
+        <a href="#summary">Summary</a>
+        <a href="#products">The two products</a>
+        <a href="#semantic">The semantic layer</a>
+        <a href="#evidence">The evidence gap</a>
+        <a href="#eval">Planned evaluation</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#refs">References</a>
+      </nav>
+      <a class="btn" href="https://github.com/BrandeisPatrick/devin-vs-cursor">View repo</a>
+    </div>
+  </aside>
+
+  <article id="top">
+    <div class="hero"><canvas id="ascii"></canvas></div>
+
+    <header class="postheader">
+      <h1>Devin vs Cursor: A Technical Comparison</h1>
+      <p class="subtitle">Two opposite bets on how an AI should understand your codebase.</p>
+      <div class="meta"><span>PATRICK LI</span><span>08.04.26</span><span>PRE-TEST REPORT · V0</span></div>
+    </header>
+
+    <section class="prose" id="summary">
+      <h2>Summary<a class="anchor" href="#summary">#</a></h2>
+      <p>Devin (Cognition) and Cursor (Anysphere) are the two most prominent commercial AI coding products, and they represent architecturally opposite answers to the same question: <strong>how should an AI agent find the right code?</strong></p>
+      <ul class="plain">
+        <li><strong>Cursor bets on a trained embedding index.</strong> Every repo is chunked, embedded with a custom model trained on real agent sessions, and synced to the cloud via Merkle trees. Retrieval is vector search plus grep, fused by the agent.</li>
+        <li><strong>Devin bets against embeddings entirely.</strong> Cognition's published position is that embedding search breaks down at scale. Instead: an auto-generated wiki as a pre-computed semantic layer, plus SWE-grep — an RL-trained retrieval model that fires up to 8 parallel grep/read/glob calls per turn.</li>
+      </ul>
+      <p>Neither product is open source. And as of August 2026, <strong>no rigorous head-to-head evaluation of the two exists</strong> — published comparisons are single-run anecdotes, philosophy pieces, or roundups that misattribute foundation-model benchmark scores to the products. This report summarizes what is actually documented, and pre-registers a small controlled evaluation.</p>
+    </section>
+
+    <section class="prose" id="products">
+      <h2>The two products<a class="anchor" href="#products">#</a></h2>
+      <p><strong>Devin — the autonomous engineer.</strong> A cloud agent you delegate tasks to: it plans, edits, tests, and opens PRs in its own sandboxed workspace. The line now spans Devin Cloud (autonomous sessions), Devin Desktop (the rebranded Windsurf IDE, June 2026), and in-house models — SWE-1.6 and SWE-1.7, served at roughly 1,000 tok/s on Cerebras. The Cascade agent was replaced by the Rust-based Devin Local in July 2026.</p>
+      <p><strong>Cursor — the AI-native IDE.</strong> A VS Code fork rebuilt around AI: tab completion, inline edits, and the Composer agent (RL-trained, October 2025). It is model-agnostic — you can pin frontier models — and its context engine is the moat: custom embeddings, Instant Grep, and an Explore subagent for parallel search. Recent moves: shared team indexes (January 2026), encrypted chunk storage with client-side decryption, and the Continue.dev acqui-hire (June 2026).</p>
+    </section>
+
+    <section id="semantic" style="max-width:880px">
+      <div class="prose">
+        <h2>The semantic layer, side by side<a class="anchor" href="#semantic">#</a></h2>
+        <p>"Semantic layer" here means everything a tool builds on top of raw files to understand a codebase: indexes, wikis, retrieval models, and the machinery that decides what the agent sees. The two designs disagree on nearly every dimension.</p>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
+          <thead><tr><th></th><th>Cursor</th><th>Devin</th></tr></thead>
+          <tbody>
+            <tr><th>Core mechanism</th><td>Embedding index — custom model trained on agent session traces</td><td>Generated wiki + RL agentic search (SWE-grep)</td></tr>
+            <tr><th>Index freshness</th><td class="num">~10 min <span style="font-family:var(--serif);color:var(--ink2)">Merkle re-check</span></td><td class="num">~2 h <span style="font-family:var(--serif);color:var(--ink2)">wiki reindex</span></td></tr>
+            <tr><th>Query-time search</th><td>Semantic search + Instant Grep + Explore subagent</td><td>Fast Context subagent: ≤8 parallel grep/read/glob per turn, ≤4 turns</td></tr>
+            <tr><th>Tuning bias</th><td>Recall-friendly — semantic match bridges vocabulary gaps</td><td>Precision-weighted — RL reward penalizes irrelevant context</td></tr>
+            <tr><th>Pre-computed understanding</th><td>None — the index is chunks</td><td>Wiki: architecture diagrams, source-linked pages</td></tr>
+            <tr><th>User steerability</th><td>Ignore files only</td><td><code style="font-family:var(--mono);font-size:12px">.devin/wiki.json</code> + Knowledge system (trigger-gated notes)</td></tr>
+            <tr><th>Server-side footprint</th><td>Encrypted chunks + embeddings, client-held keys</td><td>Full repo access in Cognition's cloud</td></tr>
+            <tr><th>Own eval claim</th><td class="num">+12.5% <span style="font-family:var(--serif);color:var(--ink2)">QA accuracy vs grep-only</span></td><td class="num">20× <span style="font-family:var(--serif);color:var(--ink2)">faster retrieval vs frontier models</span></td></tr>
+          </tbody>
+        </table>
+        <p class="tfoot">Both "own eval claim" rows are vendor-published numbers from internal benchmarks, not independent measurements.</p>
+      </div>
+
+      <figure>
+        <figcaption>Cursor: time-to-first-query, before → after shared team indexes</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale bar chart of Cursor indexing time to first query">
+          <!-- log scale: 0.1s .. 100000s → x 150..840 (115px per decade) -->
+          <line class="axis" x1="150" y1="20" x2="150" y2="200"/>
+          <line class="axis" x1="150" y1="200" x2="840" y2="200"/>
+          <g class="axlabel" text-anchor="middle">
+            <text x="150" y="216">0.1s</text><text x="265" y="216">1s</text><text x="380" y="216">10s</text>
+            <text x="495" y="216">100s</text><text x="610" y="216">1000s</text><text x="725" y="216">10⁴s</text><text x="840" y="216">10⁵s</text>
+          </g>
+          <text class="axlabel" x="840" y="238" text-anchor="end">seconds, log scale →</text>
+          <!-- median: 7.87s -> x=252 ; 0.525s -> x=233. bars start x=150 -->
+          <text class="rowlab" x="140" y="52" text-anchor="end">median</text>
+          <rect x="150" y="38" width="102" height="9" fill="#f58e3a"/>
+          <rect x="150" y="50" width="83" height="9" fill="#317cff"/>
+          <text class="val" x="258" y="46">7.87s</text>
+          <text class="val" x="239" y="59" fill="#317cff">525ms</text>
+          <!-- p90: 169.2s -> x=522 ; 1.87s -> x=296 -->
+          <text class="rowlab" x="140" y="112" text-anchor="end">p90</text>
+          <rect x="150" y="98" width="372" height="9" fill="#f58e3a"/>
+          <rect x="150" y="110" width="146" height="9" fill="#317cff"/>
+          <text class="val" x="528" y="106">2.82min</text>
+          <text class="val" x="302" y="119" fill="#317cff">1.87s</text>
+          <!-- p99: 14508s -> x=744 ; 21s -> x=417 -->
+          <text class="rowlab" x="140" y="172" text-anchor="end">p99</text>
+          <rect x="150" y="158" width="594" height="9" fill="#f58e3a"/>
+          <rect x="150" y="170" width="267" height="9" fill="#317cff"/>
+          <text class="val" x="750" y="166">4.03h</text>
+          <text class="val" x="423" y="179" fill="#317cff">21s</text>
+          <!-- series labels -->
+          <text class="series" x="760" y="46" fill="#f58e3a">before</text>
+          <text class="series" x="760" y="60" fill="#317cff">after</text>
+        </svg>
+        <p class="fig-note">Source: Cursor, "Securely indexing large codebases," Jan 2026. Vendor-reported.</p>
+      </figure>
+
+      <figure>
+        <figcaption>Devin: retrieval model serving speed</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of SWE-grep serving speed in tokens per second">
+          <!-- linear 0..3000 tok/s → x 220..820 (0.2px per tok/s) -->
+          <line class="axis" x1="220" y1="20" x2="220" y2="140"/>
+          <line class="axis" x1="220" y1="140" x2="820" y2="140"/>
+          <g class="axlabel" text-anchor="middle">
+            <text x="220" y="156">0</text><text x="420" y="156">1,000</text><text x="620" y="156">2,000</text><text x="820" y="156">3,000</text>
+          </g>
+          <text class="axlabel" x="820" y="178" text-anchor="end">output tokens / second →</text>
+          <text class="rowlab" x="210" y="42" text-anchor="end">SWE-grep-mini</text>
+          <rect x="220" y="32" width="560" height="12" fill="#4263eb"/>
+          <text class="val" x="786" y="42" fill="#4263eb">2,800+</text>
+          <text class="rowlab" x="210" y="82" text-anchor="end">SWE-grep</text>
+          <rect x="220" y="72" width="130" height="12" fill="#15aabf"/>
+          <text class="val" x="356" y="82" fill="#15aabf">650+</text>
+          <text class="rowlab" x="210" y="122" text-anchor="end">frontier models</text>
+          <rect x="220" y="112" width="28" height="12" fill="#999"/>
+          <text class="val" x="254" y="122" fill="#191919">~140</text>
+        </svg>
+        <p class="fig-note">Source: Cognition, "SWE-grep," Oct 2025, served on Cerebras. "Frontier models" bar inferred from Cognition's "up to 20× faster" claim. Vendor-reported.</p>
+      </figure>
+
+      <div class="prose">
+        <p>The philosophical split is real and documented. Cursor's semantic-search post argues purpose-trained embeddings beat grep-based agents; Cognition's Riptide and SWE-grep posts argue LLM-driven parallel search beats "state-of-the-art embedding-based systems." Both cite internal evals. <strong>They cannot both be right in general — which is what makes this testable.</strong></p>
+      </div>
+    </section>
+
+    <section class="prose" id="evidence">
+      <h2>The evidence gap<a class="anchor" href="#evidence">#</a></h2>
+      <ul class="plain">
+        <li><strong>Trickle (Jul 2025)</strong>, the only hands-on comparison: Cursor answered routine tasks in seconds; Devin took 15+ minutes and looped on complex debugging. Informal, single-run.</li>
+        <li><strong>Answer.AI (Jan 2025)</strong>: 3 of 20 real tasks usable from Devin 1.x — but the product has been rebuilt twice since.</li>
+        <li><strong>Comparison sites</strong> routinely misattribute model scores to products — one credits Cursor with Claude Opus 4.5's 80.9% SWE-bench, a model result, not a product eval.</li>
+      </ul>
+      <p>Bottom line: the public record cannot answer "which is better."</p>
+    </section>
+
+    <section class="prose" id="eval">
+      <h2>Planned evaluation<a class="anchor" href="#eval">#</a></h2>
+      <p>A private, freshly written trap repo with planted ground truth. Nine semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing), three end-to-end tasks, three runs per task, fact-recall and file-level precision/recall scoring, cost and wall-clock logged per run.</p>
+      <p>Six hypotheses, pre-registered from the architectures before any run:</p>
+      <ul class="plain">
+        <li><strong>H1</strong> — Cursor wins synonym/concept probes: embeddings bridge vocabulary; grep needs the right string.</li>
+        <li><strong>H2</strong> — Devin cites fewer, more precise files; Cursor gets higher recall on split-logic probes.</li>
+        <li><strong>H3</strong> — Devin's wiki goes stale between reindex cycles; Cursor's ~10-minute sync stays fresher.</li>
+        <li><strong>H4</strong> — Devin wins architecture-level questions: the wiki pre-computes exactly this.</li>
+        <li><strong>H5</strong> — Cursor wins wall-clock on interactive tasks; Devin is more competitive on long autonomous ones.</li>
+        <li><strong>H6</strong> — Seeding Devin's Knowledge measurably lifts its scores; Cursor has no equivalent lever.</li>
+      </ul>
+      <p class="small-note">Full protocol, controls, and scoring rubrics: <a href="https://github.com/BrandeisPatrick/devin-vs-cursor/blob/main/PLAN.md">PLAN.md</a></p>
+    </section>
+
+    <section id="pricing" style="max-width:880px">
+      <div class="prose">
+        <h2>Pricing<a class="anchor" href="#pricing">#</a></h2>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th></th><th>Cursor</th><th>Devin</th></tr></thead>
+          <tbody>
+            <tr><th>Free tier</th><td class="num">Hobby $0</td><td class="num">Free $0</td></tr>
+            <tr><th>Entry</th><td class="num">Pro $20/mo <span style="font-family:var(--serif);color:var(--ink2)">incl. ~$20 usage</span></td><td class="num">Pro $20/mo <span style="font-family:var(--serif);color:var(--ink2)">opaque allowance</span></td></tr>
+            <tr><th>Power</th><td class="num">Ultra $200/mo <span style="font-family:var(--serif);color:var(--ink2)">~20× Pro</span></td><td class="num">Max $200/mo</td></tr>
+            <tr><th>Teams</th><td class="num">$40/user/mo</td><td class="num">$80 + $40/seat/mo</td></tr>
+            <tr><th>Billing model</th><td>Token passthrough at model API rates</td><td>Daily/weekly usage allowance; top-ups at API pricing</td></tr>
+          </tbody>
+        </table>
+        <p class="tfoot">As of August 2026. Devin retired ACU-based pricing in June 2026; its usage allowance is not publicly specified.</p>
+      </div>
+    </section>
+
+    <section class="prose" id="refs">
+      <h2>References<a class="anchor" href="#refs">#</a></h2>
+      <ol class="refs">
+        <li><span class="n">[1]</span><a href="https://cursor.com/blog/semsearch">Cursor — Improving Agent with Semantic Search</a>, Nov 2025</li>
+        <li><span class="n">[2]</span><a href="https://cursor.com/blog/secure-codebase-indexing">Cursor — Securely Indexing Large Codebases</a>, Jan 2026</li>
+        <li><span class="n">[3]</span><a href="https://cursor.com/docs/context/codebase-indexing">Cursor Docs — Codebase Indexing</a></li>
+        <li><span class="n">[4]</span><a href="https://cognition.com/blog/swe-grep">Cognition — SWE-grep: Fast Context for Coding Agents</a>, Oct 2025</li>
+        <li><span class="n">[5]</span><a href="https://cognition.com/blog/devin-2">Cognition — Devin 2.0</a>, Apr 2025</li>
+        <li><span class="n">[6]</span><a href="https://docs.devin.ai/work-with-devin/deepwiki">Devin Docs — DeepWiki / Devin Wiki</a></li>
+        <li><span class="n">[7]</span><a href="https://cognition.com/blog/swe-1-6">Cognition — SWE-1.6</a></li>
+        <li><span class="n">[8]</span><a href="https://www.answer.ai/posts/2025-01-08-devin.html">Answer.AI — Thoughts on a Month with Devin</a>, Jan 2025</li>
+        <li><span class="n">[9]</span><a href="https://github.com/BrandeisPatrick/devin-vs-cursor/tree/main/research">Full annotated research notes with confidence tags</a></li>
+      </ol>
+    </section>
+
+    <footer>
+      <span>devin×cursor eval lab — a research project by Patrick Li</span>
+      <span><a href="https://github.com/BrandeisPatrick/devin-vs-cursor">GitHub</a></span>
+    </footer>
+  </article>
+</div>
+
+<script>
+/* ASCII banner — recreation of Cognition's Unicorn Studio hero:
+   value-noise field → glyph ramp, plus blob markers with dotted
+   connectors and 4-decimal intensity labels. */
+(function(){
+  const canvas=document.getElementById('ascii');
+  const ctx=canvas.getContext('2d');
+  const RAMP=[' ','·','-',':','+','*','#','X','%','0'];
+  const CELL=9, FONT=11;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W=0,H=0,cols=0,rows=0,dpr=1;
+
+  function resize(){
+    const r=canvas.parentElement.getBoundingClientRect();
+    dpr=Math.min(devicePixelRatio||1,2);
+    W=r.width;H=r.height;
+    canvas.width=W*dpr;canvas.height=H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cols=Math.ceil(W/CELL);rows=Math.ceil(H/CELL);
+  }
+
+  function hash(ix,iy){
+    let n=(ix*374761393+iy*668265263)|0;
+    n=Math.imul(n^(n>>>13),1274126177);
+    return ((n^(n>>>16))>>>0)/4294967295;
+  }
+  function smooth(t){return t*t*(3-2*t)}
+  function noise(x,y){
+    const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy;
+    const a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);
+    const u=smooth(fx),v=smooth(fy);
+    return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;
+  }
+  function field(nx,ny,t){
+    let v=0;
+    v+=.55*noise(nx*3.2+t*.11, ny*3.2-t*.05);
+    v+=.30*noise(nx*6.4-t*.07, ny*6.4+t*.09+40);
+    v+=.15*noise(nx*12.8+t*.16, ny*12.8+80);
+    v=Math.min(1,Math.max(0,v));
+    return Math.min(1,Math.pow(v,2.6)*1.35);
+  }
+
+  const blobs=[
+    {sx:.9,sy:1.3,px:0,py:2.1,rx:.34,ry:.30,cx:.28,cy:.62},
+    {sx:1.2,sy:.8,px:2.4,py:.6,rx:.30,ry:.26,cx:.55,cy:.45},
+    {sx:.7,sy:1.1,px:4.2,py:3.3,rx:.36,ry:.28,cx:.72,cy:.66}
+  ];
+
+  function draw(tms){
+    const t=tms*.001;
+    ctx.fillStyle='#F7F6F5';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#111';
+    ctx.font='400 '+FONT+'px "Geist Mono",monospace';
+    ctx.textBaseline='top';
+    for(let j=0;j<rows;j++){
+      const ny=j*CELL/H;
+      for(let i=0;i<cols;i++){
+        const v=field(i*CELL/W*(W/H),ny,t);
+        const g=RAMP[Math.min(RAMP.length-1,(v*RAMP.length)|0)];
+        if(g!==' ')ctx.fillText(g,i*CELL,j*CELL);
+      }
+    }
+    // blobs
+    const pts=blobs.map(b=>{
+      const x=(b.cx+b.rx*Math.sin(t*b.sx*.21+b.px))*W;
+      const y=(b.cy+b.ry*Math.cos(t*b.sy*.17+b.py))*H;
+      const v=field(x/W*(W/H),y/H,t);
+      return {x,y,v};
+    });
+    ctx.strokeStyle='#111';ctx.lineWidth=1.5;
+    // dotted connectors
+    ctx.setLineDash([3,7]);
+    for(let a=0;a<pts.length;a++)for(let b=a+1;b<pts.length;b++){
+      const dx=pts[a].x-pts[b].x,dy=pts[a].y-pts[b].y;
+      if(Math.hypot(dx,dy)<W*.55){
+        ctx.beginPath();ctx.moveTo(pts[a].x,pts[a].y);ctx.lineTo(pts[b].x,pts[b].y);ctx.stroke();
+      }
+    }
+    ctx.setLineDash([]);
+    // markers + labels
+    for(const p of pts){
+      ctx.fillStyle='rgba(17,17,17,.15)';
+      ctx.fillRect(p.x-5,p.y-5,10,10);
+      ctx.strokeRect(p.x-5,p.y-5,10,10);
+      const label=Math.min(.9999,p.v).toFixed(4);
+      ctx.font='600 11px "Geist Mono",monospace';
+      const tw=ctx.measureText(label).width;
+      ctx.fillStyle='#F7F6F5';
+      ctx.fillRect(p.x-14,p.y+10,tw+6,15);
+      ctx.fillStyle='#111';
+      ctx.fillText(label,p.x-11,p.y+12);
+      ctx.font='400 '+FONT+'px "Geist Mono",monospace';
+    }
+  }
+
+  let last=0;
+  function loop(tms){
+    if(tms-last>40){draw(tms);last=tms;}
+    requestAnimationFrame(loop);
+  }
+  addEventListener('resize',()=>{resize();if(reduced)draw(9000)});
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>{resize();reduced?draw(9000):requestAnimationFrame(loop)})}
+  resize();
+  reduced?draw(9000):requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
