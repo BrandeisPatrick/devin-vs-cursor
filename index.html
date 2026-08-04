@@ -70,10 +70,13 @@ figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--in
 .vs-side{display:contents}
 .vs-side:first-child>*{grid-column:1}
 .vs-side:last-child>*{grid-column:2}
-.r1{grid-row:1}.r2{grid-row:2}.r3{grid-row:3}.r4{grid-row:4}.r5{grid-row:5}.r6{grid-row:6}.r7{grid-row:7}
+.r1{grid-row:1}.r2{grid-row:2}.r3{grid-row:3}.r4{grid-row:4}.r5{grid-row:5}.r6{grid-row:6}.r7{grid-row:7}.r8{grid-row:8}.r9{grid-row:9}
 .vs-sel{width:100%;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:-.1px;padding:8px 32px 8px 10px;border:1px solid rgba(0,0,0,.35);border-radius:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 0l4 6 4-6z' fill='%23191919'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--ink);-webkit-appearance:none;appearance:none;cursor:pointer;margin-bottom:14px}
 .vs-sel:hover{border-color:var(--ink)}
 .vs-sel:focus{outline:1px solid var(--accent);outline-offset:1px}
+.pauto{font-family:var(--mono);font-size:9.5px;color:var(--ink2);letter-spacing:-.1px;line-height:1.7}
+.takehome{font-family:var(--serif);font-size:16px;font-weight:600;line-height:1.45;padding:14px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);margin:20px 0 24px}
+.mk{cursor:pointer}
 @media (max-width:640px){.vs{display:block}.vs-side{display:block}.vs-side:first-child{margin-bottom:36px}}
 .pband{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:rgba(25,25,25,.4);margin:16px 0 6px}
 .pbox{border:1px solid rgba(0,0,0,.28);background:#fff;padding:8px 10px}
@@ -90,18 +93,6 @@ figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--in
 .ticks em{font-family:var(--mono);font-style:normal;font-size:8.5px;color:var(--ink2);margin-left:4px}
 .pclaim{font-family:var(--mono);font-size:10px;color:var(--ink2);margin-top:10px;letter-spacing:-.1px}
 .psteer{font-family:var(--mono);font-size:9.5px;color:rgba(25,25,25,.45);margin-top:8px;letter-spacing:-.1px}
-/* ---------- freshness slider ---------- */
-.fresh{border:1px solid var(--hair);background:#fff;padding:20px 20px 14px}
-.fresh-ctl{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
-.fresh-ctl input[type=range]{flex:1;min-width:180px;accent-color:var(--accent)}
-.fresh-read{font-family:var(--mono);font-size:11px;color:var(--ink2)}
-.fresh-read b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.fresh-row{display:grid;grid-template-columns:104px 1fr 160px;gap:12px;align-items:center;margin-bottom:10px}
-.flabel{font-family:var(--mono);font-size:10.5px;font-weight:600}
-.ftrack{height:8px;background:var(--paper);border:1px solid var(--hair)}
-.fbar{height:100%;width:0;transition:width .1s linear}
-.fstat{font-family:var(--mono);font-size:10.5px;color:var(--ink2);text-align:right;font-variant-numeric:tabular-nums}
-.fresh-note{font-family:var(--mono);font-size:9.5px;color:rgba(25,25,25,.45);margin-top:8px;letter-spacing:-.1px;line-height:1.5}
 /* ---------- tables ---------- */
 .tablewrap{overflow-x:auto;margin:32px 0}
 table{border-collapse:collapse;min-width:640px;width:100%}
@@ -126,8 +117,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
   .side nav{display:none}
   article{padding-top:40px}
   h1{font-size:24px}
-  .fresh-row{grid-template-columns:88px 1fr;grid-template-rows:auto auto}
-  .fstat{grid-column:2;text-align:left}
 }
 </style>
 </head>
@@ -141,7 +130,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#products">The two products</a>
         <a href="#semantic">The semantic layer</a>
         <a href="#evidence">The evidence gap</a>
-        <a href="#autonomy">Autonomy</a>
         <a href="#eval">Planned evaluation</a>
         <a href="#pricing">Pricing</a>
         <a href="#refs">References</a>
@@ -171,12 +159,48 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <section id="semantic" style="max-width:880px">
       <div class="prose">
-        <h2>The semantic layer: three bets<a class="anchor" href="#semantic">#</a></h2>
-        <p>The semantic layer is everything a tool builds on top of raw files — indexes, wikis, retrieval models — and the machinery that decides what the agent actually sees. Claude Code sits at the far end of the design space: no embeddings, no wiki — a frontier model drives ripgrep directly against live files, and Anthropic's stated position is that agentic search makes indexing unnecessary. Pick a tool for each side:</p>
+        <h2>One map: semantic layer × autonomy<a class="anchor" href="#semantic">#</a></h2>
+        <p>Two questions decide which tool fits: how much codebase understanding it pre-computes (the semantic layer), and how much of the task it wants to own (autonomy). The map plots both. Click any marker to pin that tool's full pipeline and autonomy evidence below — two stay pinned side by side.</p>
       </div>
 
       <figure>
-        <figcaption>How each tool builds and queries its semantic layer</figcaption>
+        <figcaption>The design space — click a marker to pin its profile below</figcaption>
+        <svg class="diagram" viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of pre-computed understanding versus designed autonomy for Cursor, Devin, and Claude Code">
+          <defs>
+            <marker id="arr3" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".35"/>
+            </marker>
+          </defs>
+          <line x1="120" y1="360" x2="820" y2="360" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr3)"/>
+          <line x1="120" y1="360" x2="120" y2="44" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr3)"/>
+          <text class="dnote" x="820" y="392" text-anchor="end">pre-computed understanding →</text>
+          <text class="dnote" x="120" y="392">none</text>
+          <text class="dnote" transform="rotate(-90 96 200)" x="96" y="200" text-anchor="middle">designed autonomy →</text>
+          <text class="dnote" x="130" y="56">full delegation ↑</text>
+          <g stroke="#111" stroke-opacity=".3" stroke-dasharray="3 7">
+            <line x1="736" y1="270" x2="505" y2="78"/>
+            <line x1="505" y1="78" x2="200" y2="200"/>
+            <line x1="200" y1="200" x2="736" y2="270"/>
+          </g>
+          <g class="mk" data-tool="claude">
+            <rect id="mk-claude" x="194" y="194" width="12" height="12" fill="#15aabf" stroke="#15aabf" stroke-width="2"/>
+            <text class="dhead" x="200" y="182" text-anchor="middle" fill="#15aabf">CLAUDE CODE</text>
+            <text class="dsub" x="216" y="204">no index · live agentic search</text>
+          </g>
+          <g class="mk" data-tool="devin">
+            <rect id="mk-devin" x="499" y="72" width="12" height="12" fill="#f58e3a" stroke="#f58e3a" stroke-width="2"/>
+            <text class="dhead" x="505" y="60" text-anchor="middle" fill="#f58e3a">DEVIN</text>
+            <text class="dsub" x="505" y="104" text-anchor="middle">wiki + trained search · full delegate</text>
+          </g>
+          <g class="mk" data-tool="cursor">
+            <rect id="mk-cursor" x="730" y="264" width="12" height="12" fill="#317cff" stroke="#317cff" stroke-width="2"/>
+            <text class="dhead" x="736" y="252" text-anchor="middle" fill="#317cff">CURSOR</text>
+            <text class="dsub" x="736" y="296" text-anchor="middle">full index · human in loop</text>
+          </g>
+        </svg>
+
+        <div class="takehome" id="autonomy">Take-home: no two tools made the same bet. Cursor pre-computes understanding and keeps a human in the loop. Devin pre-computes and takes the whole task. Claude Code pre-computes nothing and searches live under supervision. Which corner actually delivers is unmeasured — that is what the eval below exists to answer.</div>
+
         <div class="vs">
           <div class="vs-side">
             <select class="vs-sel r1" id="sel-left" aria-label="Select left tool">
@@ -190,6 +214,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pband r5">QUERY TIME</div>
             <div class="r6" id="qy-left"></div>
             <div class="pclaim r7" id="cl-left"></div>
+            <div class="pband r8">AUTONOMY — DESIGN VS EVIDENCE</div>
+            <div class="pauto r9" id="at-left"></div>
           </div>
           <div class="vs-side">
             <select class="vs-sel r1" id="sel-right" aria-label="Select right tool">
@@ -203,6 +229,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pband r5">QUERY TIME</div>
             <div class="r6" id="qy-right"></div>
             <div class="pclaim r7" id="cl-right"></div>
+            <div class="pband r8">AUTONOMY — DESIGN VS EVIDENCE</div>
+            <div class="pauto r9" id="at-right"></div>
           </div>
         </div>
 
@@ -229,6 +257,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pbox"><b>Fused context</b><span>top-k chunks · decrypted client-side</span></div>
           </div>
           <div class="t-claim">vendor eval: +12.5% QA accuracy vs grep-only [1]</div>
+          <div class="t-auto">design: co-editing, human in loop · background agents bounded<br>evidence: routine answers in &lt;3 s [11]</div>
         </template>
 
         <template id="tpl-devin">
@@ -250,6 +279,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pbox"><b>Files + line ranges</b><span>precision-weighted · lean context</span></div>
           </div>
           <div class="t-claim">vendor eval: retrieval up to 20× faster [4]</div>
+          <div class="t-auto">design: full delegation — sessions end in PRs · child-Devin orchestration<br>evidence: only test on record — 3/20 usable (Devin 1.x, 2025) [8] · 15+ min loops [11]</div>
         </template>
 
         <template id="tpl-claude">
@@ -269,48 +299,10 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pbox"><b>Live file reads</b><span>assembled per query · always current</span></div>
           </div>
           <div class="t-claim">vendor position: agentic search replaces indexing [10]</div>
+          <div class="t-auto">design: long agentic runs · permission-gated in your terminal<br>evidence: no published delegation test — Track B would be the first</div>
         </template>
 
-        <p class="fig-note">Sources: Cursor semsearch + indexing posts [1][2][3]; Cognition SWE-grep + DeepWiki docs [4][5][6]; Anthropic Claude Code best practices [10]. "Vendor eval" claims are internal benchmarks.</p>
-      </figure>
-
-      <figure>
-        <figcaption>Index freshness after a code change</figcaption>
-        <div class="fresh">
-          <div class="fresh-ctl">
-            <input type="range" id="fslider" min="0" max="120" value="47" step="1" aria-label="Minutes since last code change">
-            <span class="fresh-read">t = <b id="fval">47</b> min since last code change</span>
-          </div>
-          <div class="fresh-row"><span class="flabel" style="color:#317cff">CURSOR</span><div class="ftrack"><div class="fbar" id="fb-cursor" style="background:#317cff"></div></div><span class="fstat" id="fs-cursor"></span></div>
-          <div class="fresh-row"><span class="flabel" style="color:#f58e3a">DEVIN</span><div class="ftrack"><div class="fbar" id="fb-devin" style="background:#f58e3a"></div></div><span class="fstat" id="fs-devin"></span></div>
-          <div class="fresh-row"><span class="flabel" style="color:#15aabf">CLAUDE CODE</span><div class="ftrack"><div class="fbar" id="fb-claude" style="background:#15aabf"></div></div><span class="fstat" id="fs-claude"></span></div>
-          <div class="fresh-note">bar = worst-case staleness of each tool's view of the repo at time t · Cursor re-syncs ~every 10 min · Devin's wiki reindexes ~every 2 h · Claude Code reads files live</div>
-        </div>
-        <p class="fig-note">Cadences as documented: Cursor Merkle re-check [2]; Devin reindex "every couple hours" [5]; Claude Code has no index to refresh [10]. Probes A7/A8 test this window directly.</p>
-      </figure>
-
-      <figure>
-        <figcaption>The design space in one axis</figcaption>
-        <svg class="diagram" viewBox="0 0 880 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spectrum of how much codebase understanding each tool pre-computes">
-          <defs>
-            <marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".35"/>
-            </marker>
-          </defs>
-          <line x1="120" y1="84" x2="830" y2="84" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr2)"/>
-          <text class="dnote" x="840" y="108" text-anchor="end">amount of understanding pre-computed →</text>
-          <rect x="156" y="80" width="8" height="8" fill="#15aabf"/>
-          <text class="dhead" x="160" y="52" text-anchor="middle" fill="#15aabf">CLAUDE CODE</text>
-          <text class="dsub" x="160" y="66" text-anchor="middle">nothing — search live at query time</text>
-          <rect x="476" y="80" width="8" height="8" fill="#f58e3a"/>
-          <text class="dhead" x="480" y="52" text-anchor="middle" fill="#f58e3a">DEVIN</text>
-          <text class="dsub" x="480" y="66" text-anchor="middle">wiki pre-built · trained searcher on demand</text>
-          <rect x="796" y="80" width="8" height="8" fill="#317cff"/>
-          <text class="dhead" x="838" y="52" text-anchor="end" fill="#317cff">CURSOR</text>
-          <text class="dsub" x="838" y="66" text-anchor="end">full embedding index, built ahead</text>
-          <text class="dnote" x="120" y="132">← fresher context · more tokens per query</text>
-          <text class="dnote" x="838" y="132" text-anchor="end">faster first answer · more staleness risk →</text>
-        </svg>
+        <p class="fig-note">Pipelines: [1][2][3][4][5][6][10] — "vendor eval" claims are internal benchmarks. Autonomy evidence: the only published delegation test, 3/20 usable on Devin 1.x [8], and one informal single-run latency test [11]; no comparable tests exist for current products.</p>
       </figure>
 
       <div class="tablewrap">
@@ -326,59 +318,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         </table>
       </div>
 
-      <figure>
-        <figcaption>Cursor: time-to-first-query, before → after shared team indexes</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale bar chart of Cursor indexing time to first query">
-          <line class="axis" x1="150" y1="20" x2="150" y2="200"/>
-          <line class="axis" x1="150" y1="200" x2="840" y2="200"/>
-          <g class="axlabel" text-anchor="middle">
-            <text x="150" y="216">0.1s</text><text x="265" y="216">1s</text><text x="380" y="216">10s</text>
-            <text x="495" y="216">100s</text><text x="610" y="216">1000s</text><text x="725" y="216">10⁴s</text><text x="840" y="216">10⁵s</text>
-          </g>
-          <text class="axlabel" x="840" y="238" text-anchor="end">seconds, log scale →</text>
-          <text class="rowlab" x="140" y="52" text-anchor="end">median</text>
-          <rect x="150" y="38" width="102" height="9" fill="#f58e3a"/>
-          <rect x="150" y="50" width="83" height="9" fill="#317cff"/>
-          <text class="val" x="258" y="46">7.87s</text>
-          <text class="val" x="239" y="59" fill="#317cff">525ms</text>
-          <text class="rowlab" x="140" y="112" text-anchor="end">p90</text>
-          <rect x="150" y="98" width="372" height="9" fill="#f58e3a"/>
-          <rect x="150" y="110" width="146" height="9" fill="#317cff"/>
-          <text class="val" x="528" y="106">2.82min</text>
-          <text class="val" x="302" y="119" fill="#317cff">1.87s</text>
-          <text class="rowlab" x="140" y="172" text-anchor="end">p99</text>
-          <rect x="150" y="158" width="594" height="9" fill="#f58e3a"/>
-          <rect x="150" y="170" width="267" height="9" fill="#317cff"/>
-          <text class="val" x="750" y="166">4.03h</text>
-          <text class="val" x="423" y="179" fill="#317cff">21s</text>
-          <text class="series" x="760" y="46" fill="#f58e3a">before</text>
-          <text class="series" x="760" y="60" fill="#317cff">after</text>
-        </svg>
-        <p class="fig-note">Source: Cursor, "Securely indexing large codebases," Jan 2026. Vendor-reported.</p>
-      </figure>
-
-      <figure>
-        <figcaption>Devin: retrieval model serving speed</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of SWE-grep serving speed in tokens per second">
-          <line class="axis" x1="220" y1="20" x2="220" y2="140"/>
-          <line class="axis" x1="220" y1="140" x2="820" y2="140"/>
-          <g class="axlabel" text-anchor="middle">
-            <text x="220" y="156">0</text><text x="420" y="156">1,000</text><text x="620" y="156">2,000</text><text x="820" y="156">3,000</text>
-          </g>
-          <text class="axlabel" x="820" y="178" text-anchor="end">output tokens / second →</text>
-          <text class="rowlab" x="210" y="42" text-anchor="end">SWE-grep-mini</text>
-          <rect x="220" y="32" width="560" height="12" fill="#4263eb"/>
-          <text class="val" x="786" y="42" fill="#4263eb">2,800+</text>
-          <text class="rowlab" x="210" y="82" text-anchor="end">SWE-grep</text>
-          <rect x="220" y="72" width="130" height="12" fill="#15aabf"/>
-          <text class="val" x="356" y="82" fill="#15aabf">650+</text>
-          <text class="rowlab" x="210" y="122" text-anchor="end">frontier models</text>
-          <rect x="220" y="112" width="28" height="12" fill="#999"/>
-          <text class="val" x="254" y="122" fill="#191919">~140</text>
-        </svg>
-        <p class="fig-note">Source: Cognition, "SWE-grep," Oct 2025, served on Cerebras. "Frontier models" bar inferred from Cognition's "up to 20× faster" claim. Vendor-reported.</p>
-      </figure>
-
       <div class="prose">
         <p>All three vendors publish reasons the others' approach fails: Cursor says semantic search beats grep-only agents, Cognition says embeddings break down at scale, Anthropic says a strong enough model needs no index. <strong>At most one of them is right in general — which is what makes this testable.</strong></p>
       </div>
@@ -392,72 +331,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <li><strong>Comparison sites</strong> routinely misattribute model scores to products — one credits Cursor with Claude Opus 4.5's 80.9% SWE-bench, a model result, not a product eval.</li>
       </ul>
       <p>Bottom line: the public record cannot answer "which is better."</p>
-    </section>
-
-    <section id="autonomy" style="max-width:880px">
-      <div class="prose">
-        <h2>Who is more autonomous?<a class="anchor" href="#autonomy">#</a></h2>
-        <p><strong>By design: Devin, and it isn't close.</strong> It is the only one of the three built primarily for full delegation — asynchronous cloud sessions in its own sandbox that end in a pull request, and since March 2026 it can orchestrate child Devin sessions. Cursor is built for supervised speed: a co-editing loop with bounded autonomy (background agents, Auto-review). Claude Code sits between — long agentic runs, but permission-gated in your terminal.</p>
-      </div>
-
-      <figure>
-        <figcaption>Designed autonomy: how each product wants to be used</figcaption>
-        <svg class="diagram" viewBox="0 0 880 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spectrum of designed autonomy from supervised co-editing to full delegation">
-          <line x1="120" y1="90" x2="830" y2="90" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr2)"/>
-          <rect x="196" y="86" width="8" height="8" fill="#317cff"/>
-          <text class="dhead" x="200" y="58" text-anchor="middle" fill="#317cff">CURSOR</text>
-          <text class="dsub" x="200" y="112" text-anchor="middle">IDE co-editing loop</text>
-          <text class="dsub" x="200" y="126" text-anchor="middle">background agents · Auto-review (bounded)</text>
-          <rect x="466" y="86" width="8" height="8" fill="#15aabf"/>
-          <text class="dhead" x="470" y="58" text-anchor="middle" fill="#15aabf">CLAUDE CODE</text>
-          <text class="dsub" x="470" y="112" text-anchor="middle">terminal agent · permission-gated</text>
-          <text class="dsub" x="470" y="126" text-anchor="middle">long agentic runs · subagents</text>
-          <rect x="786" y="86" width="8" height="8" fill="#f58e3a"/>
-          <text class="dhead" x="838" y="58" text-anchor="end" fill="#f58e3a">DEVIN</text>
-          <text class="dsub" x="838" y="112" text-anchor="end">async cloud sessions → PRs</text>
-          <text class="dsub" x="838" y="126" text-anchor="end">own sandbox · orchestrates child Devins</text>
-          <text class="dnote" x="838" y="162" text-anchor="end">designed level of unsupervised operation →</text>
-        </svg>
-        <p class="fig-note">Design intent from product docs and launch posts [4][5][10] — not measured performance. That's the next two charts.</p>
-      </figure>
-
-      <div class="prose">
-        <p><strong>By evidence: thin, stale — and unflattering.</strong> The only systematic delegation test ever published gave Devin 1.x twenty real tasks and got three usable results. The product has been rebuilt twice since, and nobody has re-measured — no comparable test exists at all for Cursor's agents or Claude Code. Track B of the planned eval closes exactly this gap: pass-1 success with zero hints, plus intervention counts (hypothesis H5).</p>
-      </div>
-
-      <figure>
-        <figcaption>The only systematic delegation test: 20 real tasks → Devin 1.x</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stacked bar of Answer.AI Devin delegation outcomes: 3 usable, 3 inconclusive, 14 failed">
-          <text class="val" x="150" y="48" fill="#317cff">3 usable</text>
-          <text class="val" x="285" y="48" text-anchor="middle" fill="#999">3 inconclusive</text>
-          <text class="val" x="540" y="48" text-anchor="middle" fill="#f58e3a">14 failed</text>
-          <rect x="150" y="56" width="90" height="20" fill="#317cff"/>
-          <rect x="240" y="56" width="90" height="20" fill="#999"/>
-          <rect x="330" y="56" width="420" height="20" fill="#f58e3a"/>
-          <text class="val" x="762" y="70">= 15% usable</text>
-          <text class="axlabel" x="150" y="100">tasks judged "usable without extensive rework" — new projects, research, analysis, modifications</text>
-        </svg>
-        <p class="fig-note">Source: Answer.AI, Jan 2025 [8] — Devin 1.x. Rebuilt twice since; treat as a floor from a previous generation, not a verdict on today's Devin.</p>
-      </figure>
-
-      <figure>
-        <figcaption>The cost of the autonomous loop: wall-clock on a routine task</figcaption>
-        <svg class="chart-svg" viewBox="0 0 880 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale bars: Cursor under 3 seconds vs Devin 15 or more minutes on a routine task">
-          <line class="axis" x1="150" y1="20" x2="150" y2="110"/>
-          <line class="axis" x1="150" y1="110" x2="830" y2="110"/>
-          <text class="rowlab" x="140" y="50" text-anchor="end">CURSOR</text>
-          <rect x="150" y="38" width="81" height="14" fill="#317cff"/>
-          <text class="val" x="237" y="50" fill="#317cff">&lt;3 s</text>
-          <text class="rowlab" x="140" y="92" text-anchor="end">DEVIN</text>
-          <rect x="150" y="80" width="502" height="14" fill="#f58e3a"/>
-          <text class="val" x="658" y="92" fill="#f58e3a">15+ min</text>
-          <g class="axlabel" text-anchor="middle">
-            <text x="150" y="126">1s</text><text x="320" y="126">10s</text><text x="490" y="126">100s</text><text x="660" y="126">1000s</text>
-          </g>
-          <text class="axlabel" x="830" y="148" text-anchor="end">seconds, log scale →</text>
-        </svg>
-        <p class="fig-note">Source: Trickle, Jul 2025 [11] — single-run, informal. Devin's loop includes planning + environment spin-up: that's the delegation tax, capability at latency.</p>
-      </figure>
     </section>
 
     <section class="prose" id="eval">
@@ -672,43 +545,51 @@ footer a:hover{color:var(--accent);text-decoration:none}
   reduced?draw(9000):requestAnimationFrame(loop);
 })();
 
-/* Interactive pipeline comparator — dropdown per side, sections row-aligned */
+/* Design-space map + dropdowns — pick from either; both stay in sync */
 (function(){
   const COLORS={cursor:'#317cff',devin:'#f58e3a',claude:'#15aabf'};
-  function render(side){
+  let order=['left','right']; /* order[0] = side replaced next by a marker click */
+  function toolOf(side){const s=document.getElementById('sel-'+side);return s?s.value:null;}
+  function renderSide(side){
     const sel=document.getElementById('sel-'+side);
     if(!sel)return;
-    const t=document.getElementById('tpl-'+sel.value).content;
+    const tool=sel.value;
+    const t=document.getElementById('tpl-'+tool).content;
+    sel.style.borderBottom='2px solid '+COLORS[tool];
     document.getElementById('ix-'+side).innerHTML=t.querySelector('.t-ix').innerHTML;
     document.getElementById('st-'+side).textContent=t.querySelector('.t-steer').textContent;
     document.getElementById('qy-'+side).innerHTML=t.querySelector('.t-qy').innerHTML;
     document.getElementById('cl-'+side).textContent=t.querySelector('.t-claim').textContent;
-    sel.style.borderBottom='2px solid '+COLORS[sel.value];
+    document.getElementById('at-'+side).innerHTML=t.querySelector('.t-auto').innerHTML;
+  }
+  function syncMarkers(){
+    const active=[toolOf('left'),toolOf('right')];
+    Object.keys(COLORS).forEach(k=>{
+      const mk=document.getElementById('mk-'+k);
+      if(mk)mk.setAttribute('fill',active.includes(k)?COLORS[k]:'#F7F6F5');
+    });
   }
   ['left','right'].forEach(side=>{
     const sel=document.getElementById('sel-'+side);
-    if(sel){sel.addEventListener('change',()=>render(side));render(side);}
+    if(sel){
+      sel.addEventListener('change',()=>{
+        order=[order.find(s=>s!==side),side];
+        renderSide(side);syncMarkers();
+      });
+      renderSide(side);
+    }
   });
-})();
-
-/* Freshness slider — worst-case staleness at time t */
-(function(){
-  const s=document.getElementById('fslider');
-  if(!s)return;
-  function set(k,v,txt){
-    document.getElementById('fb-'+k).style.width=(v/120*100)+'%';
-    document.getElementById('fs-'+k).textContent=txt;
-  }
-  function upd(){
-    const t=+s.value;
-    document.getElementById('fval').textContent=t;
-    const c=t%10, d=t%120;
-    set('cursor',c,'index '+c+' min stale');
-    set('devin',d,'wiki '+d+' min stale');
-    set('claude',0,'0 min — live read');
-  }
-  s.addEventListener('input',upd);
-  upd();
+  document.querySelectorAll('.mk').forEach(g=>{
+    g.addEventListener('click',()=>{
+      const k=g.dataset.tool;
+      if([toolOf('left'),toolOf('right')].includes(k))return;
+      const side=order[0];
+      order=[order[1],side];
+      document.getElementById('sel-'+side).value=k;
+      renderSide(side);syncMarkers();
+    });
+  });
+  syncMarkers();
 })();
 </script>
 </body>
