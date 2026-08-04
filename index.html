@@ -129,6 +129,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#summary">Summary</a>
         <a href="#products">The two products</a>
         <a href="#semantic">The semantic layer</a>
+        <a href="#tasks">Task fit</a>
         <a href="#evidence">The evidence gap</a>
         <a href="#eval">Planned evaluation</a>
         <a href="#pricing">Pricing</a>
@@ -323,6 +324,60 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </div>
     </section>
 
+    <section id="tasks" style="max-width:880px">
+      <div class="prose">
+        <h2>Designed for different tasks?<a class="anchor" href="#tasks">#</a></h2>
+        <p><strong>Yes — they are not competing for the same moment of your day.</strong> Cursor is built for the task you are doing right now: a seconds-long feedback loop you steer continuously. Devin is built for the task you don't want to do at all: hand off a scoped ticket, get a pull request back. The clearest published framing calls them different modes of working, not competing feature sets [12].</p>
+      </div>
+
+      <figure>
+        <figcaption>Two different loops</figcaption>
+        <div class="vs">
+          <div class="vs-side">
+            <div class="pband r1" style="color:#317cff;font-weight:600">CURSOR — THE INNER LOOP</div>
+            <div class="r2">
+              <div class="pbox"><b>You write / prompt</b><span>in the editor, mid-thought</span></div>
+              <div class="parr">↓</div>
+              <div class="pbox"><b>Suggestion appears</b><span>tab completion / inline edit · &lt;1 s</span></div>
+              <div class="parr">↓</div>
+              <div class="pbox"><b>Accept, reject, steer</b><span>you control every step</span></div>
+              <div class="parr">↺</div>
+            </div>
+            <div class="pclaim r3">one loop ≈ seconds · hundreds per day · you steer each one</div>
+          </div>
+          <div class="vs-side">
+            <div class="pband r1" style="color:#f58e3a;font-weight:600">DEVIN — THE OUTER LOOP</div>
+            <div class="r2">
+              <div class="pbox"><b>You write a ticket</b><span>scoped task · from Slack, Linear, or the app</span></div>
+              <div class="parr">↓</div>
+              <div class="pbox"><b>Devin plans, then works alone</b><span>own cloud sandbox · 15 min – hours</span></div>
+              <div class="parr">↓</div>
+              <div class="pbox"><b>A pull request comes back</b><span>you review the outcome, not the steps</span></div>
+              <div class="parr">↺</div>
+            </div>
+            <div class="pclaim r3">one loop = one deliverable · a few per day · you review outcomes</div>
+          </div>
+        </div>
+        <p class="fig-note">Loop shapes from product design [5][12]; latency evidence: &lt;3 s vs 15+ min on the same routine task [11].</p>
+      </figure>
+
+      <div class="tablewrap">
+        <table>
+          <colgroup><col style="width:40%"><col style="width:20%"><col style="width:20%"><col style="width:20%"></colgroup>
+          <thead><tr><th>Task</th><th>Cursor</th><th>Devin</th><th>Claude Code</th></tr></thead>
+          <tbody>
+            <tr><th style="white-space:normal">Writing code in-flow, requirements still evolving</th><td class="num">■■■</td><td class="num">■□□</td><td class="num">■■□</td></tr>
+            <tr><th style="white-space:normal">Debugging something you're in the middle of</th><td class="num">■■■</td><td class="num">■□□</td><td class="num">■■■</td></tr>
+            <tr><th style="white-space:normal">Well-scoped ticket → reviewed PR</th><td class="num">■■□</td><td class="num">■■■</td><td class="num">■■□</td></tr>
+            <tr><th style="white-space:normal">Parallel batches: migrations, dependency bumps</th><td class="num">■□□</td><td class="num">■■■</td><td class="num">■■□</td></tr>
+            <tr><th style="white-space:normal">Ramping on an unfamiliar codebase</th><td class="num">■■□</td><td class="num">■■■</td><td class="num">■■□</td></tr>
+            <tr><th style="white-space:normal">Code that must stay on your machine</th><td class="num">■■□</td><td class="num">□□□</td><td class="num">■■■</td></tr>
+          </tbody>
+        </table>
+        <p class="tfoot">■ = design fit, read off each product's documented positioning [1][5][10][12] — not measured performance. Track B of the eval tests the middle rows directly.</p>
+      </div>
+    </section>
+
     <section class="prose" id="evidence">
       <h2>The evidence gap<a class="anchor" href="#evidence">#</a></h2>
       <ul class="plain">
@@ -381,6 +436,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <li><span class="n">[9]</span><a href="https://github.com/BrandeisPatrick/devin-vs-cursor/tree/main/research">Full annotated research notes with confidence tags</a></li>
         <li><span class="n">[10]</span><a href="https://www.anthropic.com/engineering/claude-code-best-practices">Anthropic — Claude Code Best Practices (agentic search, no indexing)</a>, Apr 2025</li>
         <li><span class="n">[11]</span><a href="https://trickle.so/blog/devin-ai-or-cursor">Trickle — Devin AI or Cursor</a>, Jul 2025</li>
+        <li><span class="n">[12]</span><a href="https://www.builder.io/blog/devin-vs-cursor">Builder.io — Devin vs Cursor: modes, not features</a>, updated Jan 2026</li>
       </ol>
     </section>
 

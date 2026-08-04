@@ -70,6 +70,16 @@ A Claude Code arm runs the same probes at marginal cost and is the natural no-in
 
 So the honest answer: **Devin is the most autonomous by architecture; whether that autonomy is *reliable* is unmeasured** — which is what Track B (pass-1 zero-hint success + intervention counts, hypothesis H5) is designed to answer.
 
+## Designed for different tasks? Yes.
+
+They are not competing for the same moment of your day — the clearest published framing calls them different *modes*, not competing feature sets (Builder.io):
+
+- **Cursor — the inner loop.** You write, a suggestion appears in under a second, you accept or steer. One loop ≈ seconds; hundreds per day; you control every step. Best for in-flow work: evolving requirements, live debugging.
+- **Devin — the outer loop.** You write a scoped ticket, Devin plans and works alone in its cloud sandbox (15 min–hours), a PR comes back. One loop = one deliverable; a few per day; you review outcomes. Best for delegable work: backlog tickets, parallel batches (migrations, dependency bumps), ramping via its wiki.
+- **Claude Code** spans both edges: interactive in the terminal, strong for supervised debugging and for code that must stay on your machine.
+
+So "which is better" partly dissolves into "for which task" — the eval's Track B tests the contested middle (well-scoped ticket → PR), where all three claim to work.
+
 ## Planned evaluation (summary)
 
 A private trap repo with planted ground truth; 9 semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing) + 3 end-to-end tasks; 3 runs per task; fact-recall and file-level precision/recall scoring; cost and wall-clock logged per run. Six pre-registered hypotheses derived from the architectures — e.g. Cursor should win synonym probes (H1), Devin should win architecture-level questions (H4), and Devin's wiki should go stale between reindex cycles (H3). Full design in [PLAN.md](PLAN.md).
