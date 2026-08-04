@@ -141,6 +141,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <a href="#products">The two products</a>
         <a href="#semantic">The semantic layer</a>
         <a href="#evidence">The evidence gap</a>
+        <a href="#autonomy">Autonomy</a>
         <a href="#eval">Planned evaluation</a>
         <a href="#pricing">Pricing</a>
         <a href="#refs">References</a>
@@ -393,6 +394,72 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <p>Bottom line: the public record cannot answer "which is better."</p>
     </section>
 
+    <section id="autonomy" style="max-width:880px">
+      <div class="prose">
+        <h2>Who is more autonomous?<a class="anchor" href="#autonomy">#</a></h2>
+        <p><strong>By design: Devin, and it isn't close.</strong> It is the only one of the three built primarily for full delegation — asynchronous cloud sessions in its own sandbox that end in a pull request, and since March 2026 it can orchestrate child Devin sessions. Cursor is built for supervised speed: a co-editing loop with bounded autonomy (background agents, Auto-review). Claude Code sits between — long agentic runs, but permission-gated in your terminal.</p>
+      </div>
+
+      <figure>
+        <figcaption>Designed autonomy: how each product wants to be used</figcaption>
+        <svg class="diagram" viewBox="0 0 880 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spectrum of designed autonomy from supervised co-editing to full delegation">
+          <line x1="120" y1="90" x2="830" y2="90" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr2)"/>
+          <rect x="196" y="86" width="8" height="8" fill="#317cff"/>
+          <text class="dhead" x="200" y="58" text-anchor="middle" fill="#317cff">CURSOR</text>
+          <text class="dsub" x="200" y="112" text-anchor="middle">IDE co-editing loop</text>
+          <text class="dsub" x="200" y="126" text-anchor="middle">background agents · Auto-review (bounded)</text>
+          <rect x="466" y="86" width="8" height="8" fill="#15aabf"/>
+          <text class="dhead" x="470" y="58" text-anchor="middle" fill="#15aabf">CLAUDE CODE</text>
+          <text class="dsub" x="470" y="112" text-anchor="middle">terminal agent · permission-gated</text>
+          <text class="dsub" x="470" y="126" text-anchor="middle">long agentic runs · subagents</text>
+          <rect x="786" y="86" width="8" height="8" fill="#f58e3a"/>
+          <text class="dhead" x="838" y="58" text-anchor="end" fill="#f58e3a">DEVIN</text>
+          <text class="dsub" x="838" y="112" text-anchor="end">async cloud sessions → PRs</text>
+          <text class="dsub" x="838" y="126" text-anchor="end">own sandbox · orchestrates child Devins</text>
+          <text class="dnote" x="838" y="162" text-anchor="end">designed level of unsupervised operation →</text>
+        </svg>
+        <p class="fig-note">Design intent from product docs and launch posts [4][5][10] — not measured performance. That's the next two charts.</p>
+      </figure>
+
+      <div class="prose">
+        <p><strong>By evidence: thin, stale — and unflattering.</strong> The only systematic delegation test ever published gave Devin 1.x twenty real tasks and got three usable results. The product has been rebuilt twice since, and nobody has re-measured — no comparable test exists at all for Cursor's agents or Claude Code. Track B of the planned eval closes exactly this gap: pass-1 success with zero hints, plus intervention counts (hypothesis H5).</p>
+      </div>
+
+      <figure>
+        <figcaption>The only systematic delegation test: 20 real tasks → Devin 1.x</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Stacked bar of Answer.AI Devin delegation outcomes: 3 usable, 3 inconclusive, 14 failed">
+          <text class="val" x="150" y="48" fill="#317cff">3 usable</text>
+          <text class="val" x="285" y="48" text-anchor="middle" fill="#999">3 inconclusive</text>
+          <text class="val" x="540" y="48" text-anchor="middle" fill="#f58e3a">14 failed</text>
+          <rect x="150" y="56" width="90" height="20" fill="#317cff"/>
+          <rect x="240" y="56" width="90" height="20" fill="#999"/>
+          <rect x="330" y="56" width="420" height="20" fill="#f58e3a"/>
+          <text class="val" x="762" y="70">= 15% usable</text>
+          <text class="axlabel" x="150" y="100">tasks judged "usable without extensive rework" — new projects, research, analysis, modifications</text>
+        </svg>
+        <p class="fig-note">Source: Answer.AI, Jan 2025 [8] — Devin 1.x. Rebuilt twice since; treat as a floor from a previous generation, not a verdict on today's Devin.</p>
+      </figure>
+
+      <figure>
+        <figcaption>The cost of the autonomous loop: wall-clock on a routine task</figcaption>
+        <svg class="chart-svg" viewBox="0 0 880 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale bars: Cursor under 3 seconds vs Devin 15 or more minutes on a routine task">
+          <line class="axis" x1="150" y1="20" x2="150" y2="110"/>
+          <line class="axis" x1="150" y1="110" x2="830" y2="110"/>
+          <text class="rowlab" x="140" y="50" text-anchor="end">CURSOR</text>
+          <rect x="150" y="38" width="81" height="14" fill="#317cff"/>
+          <text class="val" x="237" y="50" fill="#317cff">&lt;3 s</text>
+          <text class="rowlab" x="140" y="92" text-anchor="end">DEVIN</text>
+          <rect x="150" y="80" width="502" height="14" fill="#f58e3a"/>
+          <text class="val" x="658" y="92" fill="#f58e3a">15+ min</text>
+          <g class="axlabel" text-anchor="middle">
+            <text x="150" y="126">1s</text><text x="320" y="126">10s</text><text x="490" y="126">100s</text><text x="660" y="126">1000s</text>
+          </g>
+          <text class="axlabel" x="830" y="148" text-anchor="end">seconds, log scale →</text>
+        </svg>
+        <p class="fig-note">Source: Trickle, Jul 2025 [11] — single-run, informal. Devin's loop includes planning + environment spin-up: that's the delegation tax, capability at latency.</p>
+      </figure>
+    </section>
+
     <section class="prose" id="eval">
       <h2>Planned evaluation<a class="anchor" href="#eval">#</a></h2>
       <p>A private, freshly written trap repo with planted ground truth. Nine semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing), three end-to-end tasks, three runs per task, fact-recall and file-level precision/recall scoring, cost and wall-clock logged per run. A Claude Code arm runs the same probes at marginal cost — the natural no-index control.</p>
@@ -440,6 +507,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <li><span class="n">[8]</span><a href="https://www.answer.ai/posts/2025-01-08-devin.html">Answer.AI — Thoughts on a Month with Devin</a>, Jan 2025</li>
         <li><span class="n">[9]</span><a href="https://github.com/BrandeisPatrick/devin-vs-cursor/tree/main/research">Full annotated research notes with confidence tags</a></li>
         <li><span class="n">[10]</span><a href="https://www.anthropic.com/engineering/claude-code-best-practices">Anthropic — Claude Code Best Practices (agentic search, no indexing)</a>, Apr 2025</li>
+        <li><span class="n">[11]</span><a href="https://trickle.so/blog/devin-ai-or-cursor">Trickle — Devin AI or Cursor</a>, Jul 2025</li>
       </ol>
     </section>
 
@@ -462,20 +530,10 @@ footer a:hover{color:var(--accent);text-decoration:none}
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W=0,H=0,cols=0,rows=0,dpr=1,mask=null,edgeM=null,halo=null;
 
-  /* Perficient logo — official SVG paths, viewBox 300x56 (mark + wordmark) */
+  /* Perficient logo — official SVG paths, mark only (bbox ~34.6 x 49.7) */
   const LOGO_PATHS=[
     "M9.7,0L0,6.2l22.2,13.4c1.3.7,2,2.1,2,3.5v26.9l10.4-6.9v-25.8c0-1.4-.8-2.8-2-3.5L9.7,0Z",
-    "M16.1,24.2l-8.6-5.1v20.8l3.4,2v-9.2l5.7,3.5c.4.2.8,0,.8-.4v-9.2c0-1-.5-1.9-1.3-2.4h0Z",
-    "M51.1,42.9V15.2h14.3c2.3,0,4.3.4,6,1.1s3,1.9,3.9,3.3c.9,1.4,1.4,3.1,1.4,5s-.5,3.7-1.4,5.1-2.2,2.5-3.9,3.3-3.7,1.2-6,1.2h-7.4v8.7h-7,0ZM58.1,28.5h7.1c.9,0,1.7-.2,2.3-.5s1.1-.7,1.5-1.3.5-1.3.5-2-.2-1.5-.5-2-.8-1-1.5-1.3-1.4-.5-2.3-.5h-7.1v7.6h0Z",
-    "M79.7,42.9V15.2h22.3v5.9h-15.3v5.1h12.5v5.6h-12.5v5.2h15.9v5.9h-22.9Z",
-    "M105.7,42.9V15.2h14.5c2.3,0,4.3.4,5.9,1.1,1.7.8,2.9,1.9,3.9,3.3.9,1.4,1.4,3.1,1.4,5.1s-.5,3.6-1.4,4.9c-1,1.4-2.3,2.4-4.2,3.2l6.4,10.2h-8.1l-5.4-8.7h-6v8.7h-7,0ZM112.7,28.5h7.2c1.4,0,2.5-.4,3.2-1,.8-.7,1.1-1.6,1.1-2.8s-.4-2.2-1.1-2.8c-.8-.7-1.9-1-3.2-1h-7.2v7.6Z",
-    "M134.9,42.9V15.2h21.9v5.9h-14.9v5.3h12.6v5.6h-12.6v10.9h-7Z",
-    "M159.9,42.9V15.2h7v27.8s-7,0-7,0Z",
-    "M185.6,43.2c-3.2,0-5.9-.6-8.3-1.7-2.3-1.2-4.1-2.8-5.4-4.9-1.3-2.1-1.9-4.6-1.9-7.4s.7-5.3,2-7.4,3.2-3.8,5.6-5c2.4-1.2,5.2-1.8,8.4-1.8s5,.4,7.1,1.3c2.1.9,3.8,2.1,5.1,3.7s2.1,3.4,2.3,5.5h-7c-.4-1.4-1.2-2.6-2.6-3.4-1.3-.8-3-1.3-5-1.3s-3.3.4-4.7,1c-1.3.7-2.3,1.6-3.1,2.9s-1.1,2.8-1.1,4.4.4,3.2,1.1,4.4c.7,1.3,1.7,2.2,3,2.9,1.3.7,2.8,1,4.7,1s3.7-.4,5.1-1.3c1.4-.8,2.2-2,2.6-3.4h7c-.2,2.1-1,3.9-2.4,5.5-1.4,1.6-3.1,2.8-5.3,3.7-2.2.9-4.5,1.3-7.2,1.3h0Z",
-    "M203.1,42.9V15.2h7v27.8s-7,0-7,0Z",
-    "M213.9,42.9V15.2h22.3v5.9h-15.3v5.1h12.5v5.6h-12.5v5.2h15.9v5.9h-22.9Z",
-    "M239.6,42.9V15.2h6.3l14.4,16.7V15.2h6.8v27.8h-6.3l-14.4-16.7v16.7h-6.8Z",
-    "M279.2,42.9v-21.8h-9.7v-5.9h26.3v5.9h-9.7v21.8h-7,0Z"
+    "M16.1,24.2l-8.6-5.1v20.8l3.4,2v-9.2l5.7,3.5c.4.2.8,0,.8-.4v-9.2c0-1-.5-1.9-1.3-2.4h0Z"
   ];
 
   function buildMask(){
@@ -485,8 +543,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
     oc.width=mw; oc.height=mh;
     const c=oc.getContext('2d',{willReadFrequently:true});
     c.fillStyle='#000'; c.fillRect(0,0,mw,mh);
-    const LW=300, LH=56;
-    const tw=mw*.88, s=tw/LW, th=LH*s;
+    const LW=34.6, LH=49.7;
+    const th=mh*.62, s=th/LH, tw=LW*s;
     c.save(); c.translate((mw-tw)/2,(mh-th)/2); c.scale(s,s);
     c.fillStyle='#fff';
     LOGO_PATHS.forEach(d=>c.fill(new Path2D(d)));
@@ -559,7 +617,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
     ctx.fillStyle='#111';
     ctx.font='400 '+FONT+'px "Geist Mono",monospace';
     ctx.textBaseline='top';
-    let cur='#111';
     for(let j=0;j<rows;j++){
       const ny=j*CELL/H;
       for(let i=0;i<cols;i++){
@@ -571,12 +628,9 @@ footer a:hover{color:var(--accent);text-decoration:none}
         if(vv>0.999)vv=0.999;
         const g=RAMP[Math.min(RAMP.length-1,(vv*RAMP.length)|0)];
         if(g===' ')continue;
-        const style=m>0.5?'#075056':'#111';
-        if(style!==cur){ctx.fillStyle=style;cur=style;}
         ctx.fillText(g,i*CELL,j*CELL);
       }
     }
-    ctx.fillStyle='#111';
     const pts=blobs.map(b=>{
       const x=(b.cx+b.rx*Math.sin(t*b.sx*.21+b.px))*W;
       const y=(b.cy+b.ry*Math.cos(t*b.sy*.17+b.py))*H;

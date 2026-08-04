@@ -58,6 +58,18 @@ A Claude Code arm runs the same probes at marginal cost and is the natural no-in
 - **Comparison sites** routinely misattribute model scores to products (e.g. crediting Cursor with Claude Opus 4.5's 80.9% SWE-bench).
 - Bottom line: **the public record cannot answer "which is better."**
 
+## Who is more autonomous?
+
+**By design: Devin, and it isn't close.** It is the only product built primarily for full delegation — async cloud sessions in its own sandbox that end in a PR, plus child-session orchestration ("Devin Manages Devins", Mar 2026). Cursor is built for supervised speed with bounded autonomy (background agents, Auto-review); Claude Code runs long agentic sessions but stays permission-gated.
+
+**By evidence: thin, stale, and unflattering.**
+
+- The only systematic delegation test (Answer.AI, Jan 2025): 20 real tasks to Devin 1.x → **3 usable, 3 inconclusive, 14 failed (~15%)**. The product has been rebuilt twice since.
+- The only head-to-head (Trickle, Jul 2025, single-run): Cursor answered a routine task in <3 s; Devin took 15+ min — the delegation loop's planning and environment spin-up is a real tax.
+- No comparable test exists for current Devin, Cursor's agents, or Claude Code.
+
+So the honest answer: **Devin is the most autonomous by architecture; whether that autonomy is *reliable* is unmeasured** — which is what Track B (pass-1 zero-hint success + intervention counts, hypothesis H5) is designed to answer.
+
 ## Planned evaluation (summary)
 
 A private trap repo with planted ground truth; 9 semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing) + 3 end-to-end tasks; 3 runs per task; fact-recall and file-level precision/recall scoring; cost and wall-clock logged per run. Six pre-registered hypotheses derived from the architectures — e.g. Cursor should win synonym probes (H1), Devin should win architecture-level questions (H4), and Devin's wiki should go stale between reindex cycles (H3). Full design in [PLAN.md](PLAN.md).
