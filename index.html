@@ -458,9 +458,63 @@ footer a:hover{color:var(--accent);text-decoration:none}
   const canvas=document.getElementById('ascii');
   const ctx=canvas.getContext('2d');
   const RAMP=[' ','·','-',':','+','*','#','X','%','0'];
-  const CELL=9, FONT=11;
+  const CELL=6, FONT=8;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W=0,H=0,cols=0,rows=0,dpr=1;
+  let W=0,H=0,cols=0,rows=0,dpr=1,mask=null,edgeM=null,halo=null;
+
+  /* Perficient logo — official SVG paths, viewBox 300x56 (mark + wordmark) */
+  const LOGO_PATHS=[
+    "M9.7,0L0,6.2l22.2,13.4c1.3.7,2,2.1,2,3.5v26.9l10.4-6.9v-25.8c0-1.4-.8-2.8-2-3.5L9.7,0Z",
+    "M16.1,24.2l-8.6-5.1v20.8l3.4,2v-9.2l5.7,3.5c.4.2.8,0,.8-.4v-9.2c0-1-.5-1.9-1.3-2.4h0Z",
+    "M51.1,42.9V15.2h14.3c2.3,0,4.3.4,6,1.1s3,1.9,3.9,3.3c.9,1.4,1.4,3.1,1.4,5s-.5,3.7-1.4,5.1-2.2,2.5-3.9,3.3-3.7,1.2-6,1.2h-7.4v8.7h-7,0ZM58.1,28.5h7.1c.9,0,1.7-.2,2.3-.5s1.1-.7,1.5-1.3.5-1.3.5-2-.2-1.5-.5-2-.8-1-1.5-1.3-1.4-.5-2.3-.5h-7.1v7.6h0Z",
+    "M79.7,42.9V15.2h22.3v5.9h-15.3v5.1h12.5v5.6h-12.5v5.2h15.9v5.9h-22.9Z",
+    "M105.7,42.9V15.2h14.5c2.3,0,4.3.4,5.9,1.1,1.7.8,2.9,1.9,3.9,3.3.9,1.4,1.4,3.1,1.4,5.1s-.5,3.6-1.4,4.9c-1,1.4-2.3,2.4-4.2,3.2l6.4,10.2h-8.1l-5.4-8.7h-6v8.7h-7,0ZM112.7,28.5h7.2c1.4,0,2.5-.4,3.2-1,.8-.7,1.1-1.6,1.1-2.8s-.4-2.2-1.1-2.8c-.8-.7-1.9-1-3.2-1h-7.2v7.6Z",
+    "M134.9,42.9V15.2h21.9v5.9h-14.9v5.3h12.6v5.6h-12.6v10.9h-7Z",
+    "M159.9,42.9V15.2h7v27.8s-7,0-7,0Z",
+    "M185.6,43.2c-3.2,0-5.9-.6-8.3-1.7-2.3-1.2-4.1-2.8-5.4-4.9-1.3-2.1-1.9-4.6-1.9-7.4s.7-5.3,2-7.4,3.2-3.8,5.6-5c2.4-1.2,5.2-1.8,8.4-1.8s5,.4,7.1,1.3c2.1.9,3.8,2.1,5.1,3.7s2.1,3.4,2.3,5.5h-7c-.4-1.4-1.2-2.6-2.6-3.4-1.3-.8-3-1.3-5-1.3s-3.3.4-4.7,1c-1.3.7-2.3,1.6-3.1,2.9s-1.1,2.8-1.1,4.4.4,3.2,1.1,4.4c.7,1.3,1.7,2.2,3,2.9,1.3.7,2.8,1,4.7,1s3.7-.4,5.1-1.3c1.4-.8,2.2-2,2.6-3.4h7c-.2,2.1-1,3.9-2.4,5.5-1.4,1.6-3.1,2.8-5.3,3.7-2.2.9-4.5,1.3-7.2,1.3h0Z",
+    "M203.1,42.9V15.2h7v27.8s-7,0-7,0Z",
+    "M213.9,42.9V15.2h22.3v5.9h-15.3v5.1h12.5v5.6h-12.5v5.2h15.9v5.9h-22.9Z",
+    "M239.6,42.9V15.2h6.3l14.4,16.7V15.2h6.8v27.8h-6.3l-14.4-16.7v16.7h-6.8Z",
+    "M279.2,42.9v-21.8h-9.7v-5.9h26.3v5.9h-9.7v21.8h-7,0Z"
+  ];
+
+  function buildMask(){
+    if(!cols||!rows)return;
+    const S=4, mw=cols*S, mh=rows*S;
+    const oc=document.createElement('canvas');
+    oc.width=mw; oc.height=mh;
+    const c=oc.getContext('2d',{willReadFrequently:true});
+    c.fillStyle='#000'; c.fillRect(0,0,mw,mh);
+    const LW=300, LH=56;
+    const tw=mw*.88, s=tw/LW, th=LH*s;
+    c.save(); c.translate((mw-tw)/2,(mh-th)/2); c.scale(s,s);
+    c.fillStyle='#fff';
+    LOGO_PATHS.forEach(d=>c.fill(new Path2D(d)));
+    c.restore();
+    const px=c.getImageData(0,0,mw,mh).data;
+    mask=new Float32Array(cols*rows);
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+      let sum=0;
+      for(let y=0;y<S;y++)for(let x=0;x<S;x++)sum+=px[(((j*S+y)*mw)+(i*S+x))*4];
+      mask[j*cols+i]=sum/(S*S*255);
+    }
+    edgeM=new Float32Array(cols*rows);
+    for(let j=1;j<rows-1;j++)for(let i=1;i<cols-1;i++){
+      const gx=mask[j*cols+i+1]-mask[j*cols+i-1];
+      const gy=mask[(j+1)*cols+i]-mask[(j-1)*cols+i];
+      edgeM[j*cols+i]=Math.min(1,Math.hypot(gx,gy)*1.2);
+    }
+    /* dilated mask: clears background noise around the logo so the contour separates */
+    const R=3;
+    halo=new Float32Array(cols*rows);
+    for(let j=0;j<rows;j++)for(let i=0;i<cols;i++){
+      let mx=0;
+      for(let y=Math.max(0,j-R);y<=Math.min(rows-1,j+R);y++)
+        for(let x=Math.max(0,i-R);x<=Math.min(cols-1,i+R);x++)
+          if(mask[y*cols+x]>mx)mx=mask[y*cols+x];
+      halo[j*cols+i]=mx;
+    }
+  }
 
   function resize(){
     const r=canvas.parentElement.getBoundingClientRect();
@@ -469,6 +523,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
     canvas.width=W*dpr;canvas.height=H*dpr;
     ctx.setTransform(dpr,0,0,dpr,0,0);
     cols=Math.ceil(W/CELL);rows=Math.ceil(H/CELL);
+    buildMask();
   }
 
   function hash(ix,iy){
@@ -504,14 +559,24 @@ footer a:hover{color:var(--accent);text-decoration:none}
     ctx.fillStyle='#111';
     ctx.font='400 '+FONT+'px "Geist Mono",monospace';
     ctx.textBaseline='top';
+    let cur='#111';
     for(let j=0;j<rows;j++){
       const ny=j*CELL/H;
       for(let i=0;i<cols;i++){
         const v=field(i*CELL/W*(W/H),ny,t);
-        const g=RAMP[Math.min(RAMP.length-1,(v*RAMP.length)|0)];
-        if(g!==' ')ctx.fillText(g,i*CELL,j*CELL);
+        const idx=j*cols+i;
+        const m=mask?mask[idx]:0, e=edgeM?edgeM[idx]:0, h=halo?halo[idx]:0;
+        const out=v*(1-h*.9);
+        let vv=out*(1-m)+(0.72+v*0.27)*m+e*0.3;
+        if(vv>0.999)vv=0.999;
+        const g=RAMP[Math.min(RAMP.length-1,(vv*RAMP.length)|0)];
+        if(g===' ')continue;
+        const style=m>0.5?'#075056':'#111';
+        if(style!==cur){ctx.fillStyle=style;cur=style;}
+        ctx.fillText(g,i*CELL,j*CELL);
       }
     }
+    ctx.fillStyle='#111';
     const pts=blobs.map(b=>{
       const x=(b.cx+b.rx*Math.sin(t*b.sx*.21+b.px))*W;
       const y=(b.cy+b.ry*Math.cos(t*b.sy*.17+b.py))*H;
