@@ -40,6 +40,17 @@ Anysphere's Cursor is a VS Code fork rebuilt around AI: tab completion, inline e
 
 The philosophical split is real and documented: Cursor's semsearch post argues purpose-trained embeddings beat grep-based agents; Cognition's Riptide/SWE-grep posts argue LLM-driven parallel search beats "state-of-the-art embedding-based systems." Both cite internal evals. **They cannot both be right in general — which is what makes this testable.**
 
+### The third bet: Claude Code
+
+Anthropic's Claude Code is the control group of this architecture debate — it pre-computes **nothing**:
+
+- No embedding index, no wiki, no server-side repo copy: a frontier model drives ripgrep/glob/read directly against live files, with Explore subagents for parallel search. Anthropic's stated position is that agentic search makes indexing unnecessary ([Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)).
+- **Freshness:** nothing to go stale — it reads the file as it is now (vs Cursor's ~10 min sync, Devin's ~2 h wiki).
+- **Steerability:** CLAUDE.md + skills + memory — fully user-written and versioned in-repo.
+- **The trade:** zero staleness and zero server-side footprint, paid for in tokens per query (no pre-computed shortcut to "where is X?").
+
+A Claude Code arm runs the same probes at marginal cost and is the natural no-index baseline for the evaluation.
+
 ## What the evidence actually shows
 
 - **Trickle (Jul 2025)**, the only hands-on comparison: Cursor answered routine tasks in seconds; Devin took 15+ minutes and looped on complex debugging. Informal, single-run.

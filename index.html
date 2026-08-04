@@ -15,7 +15,7 @@
   --serif:"Source Serif 4",Georgia,serif;
   --sans:"Inter",system-ui,-apple-system,sans-serif;
   --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --blue:#317cff; --orange:#f58e3a;
+  --blue:#317cff; --orange:#f58e3a; --teal:#15aabf;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{font-size:16px}
@@ -39,8 +39,6 @@ article{max-width:880px;padding-top:120px;padding-bottom:96px}
 .hero{width:100%;aspect-ratio:1.5073;overflow:hidden;margin-bottom:40px}
 .hero canvas{width:100%;height:100%;display:block}
 h1{font-family:var(--serif);font-weight:300;font-size:32px;line-height:1.2;letter-spacing:-.02em;max-width:612px}
-.subtitle{font-family:var(--serif);font-weight:300;font-size:20px;line-height:1.35;letter-spacing:-.01em;color:var(--ink2);margin-top:10px;max-width:612px}
-.meta{font-family:var(--mono);font-size:12px;line-height:1.3;letter-spacing:-.12px;color:var(--ink2);margin-top:20px;display:flex;gap:24px;flex-wrap:wrap}
 .postheader{border-bottom:1px solid var(--hair);padding-bottom:24px;margin-bottom:24px}
 .prose{max-width:612px}
 p{font-size:15px;line-height:1.5;margin-bottom:12px}
@@ -62,28 +60,54 @@ figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--in
 .chart-svg .val{font-family:var(--mono);font-size:11px;font-weight:500;fill:#191919}
 .chart-svg .series{font-family:var(--sans);font-size:11px;font-weight:500}
 .chart-svg .rowlab{font-family:var(--sans);font-size:12px;fill:#191919}
-/* ---------- pipeline diagram ---------- */
+/* ---------- pipeline diagram (svg) ---------- */
 .diagram{width:100%;height:auto;display:block}
-.diagram .dbox{fill:#fff;stroke:#000;stroke-opacity:.3;stroke-width:1}
-.diagram .dtitle{font-family:var(--sans);font-size:12.5px;font-weight:500;fill:#191919}
 .diagram .dsub{font-family:var(--mono);font-size:9.5px;fill:rgba(25,25,25,.56);letter-spacing:-.1px}
 .diagram .dhead{font-family:var(--mono);font-size:12px;font-weight:600;fill:#000}
-.diagram .dheadsub{font-family:var(--mono);font-size:10px;fill:rgba(25,25,25,.56)}
-.diagram .dphase{font-family:var(--mono);font-size:10px;letter-spacing:.1em;fill:rgba(25,25,25,.4)}
-.diagram .dflow{stroke:#000;stroke-opacity:.45;stroke-width:1;fill:none}
-.diagram .dsep{stroke:#000;stroke-opacity:.12;stroke-width:1;stroke-dasharray:3 6}
-.diagram .dclaim{font-family:var(--mono);font-size:10px;fill:rgba(25,25,25,.56)}
 .diagram .dnote{font-family:var(--mono);font-size:9.5px;fill:rgba(25,25,25,.45)}
+/* ---------- interactive comparator ---------- */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.vs-sel{width:100%;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:-.1px;padding:8px 32px 8px 10px;border:1px solid rgba(0,0,0,.35);border-radius:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 0l4 6 4-6z' fill='%23191919'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--ink);-webkit-appearance:none;appearance:none;cursor:pointer;margin-bottom:14px}
+.vs-sel:hover{border-color:var(--ink)}
+.vs-sel:focus{outline:1px solid var(--accent);outline-offset:1px}
+@media (max-width:640px){.vs{grid-template-columns:1fr}}
+.tool-head{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);padding-bottom:6px;border-bottom:2px solid;margin-bottom:2px}
+.tool-head small{display:block;font-family:var(--mono);font-weight:400;font-size:9.5px;color:var(--ink2);margin-top:3px;letter-spacing:-.1px}
+.pband{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:rgba(25,25,25,.4);margin:16px 0 6px}
+.pbox{border:1px solid rgba(0,0,0,.28);background:#fff;padding:8px 10px}
+.pbox.dashed{border-style:dashed}
+.pbox b{display:block;font-family:var(--sans);font-size:12.5px;font-weight:500;color:#191919}
+.pbox span{display:block;font-family:var(--mono);font-size:9.5px;color:var(--ink2);margin-top:3px;letter-spacing:-.1px;line-height:1.4}
+.parr{text-align:center;font-family:var(--mono);color:rgba(0,0,0,.4);font-size:11px;line-height:1;padding:3px 0}
+.prow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.prow .pbox{padding:7px 8px}
+.prow .pbox b{font-size:11px}
+.prow .pbox span{font-size:8.5px}
+.ticks{display:flex;gap:5px;margin-top:6px;align-items:center}
+.ticks i{width:2px;height:10px;background:#4263eb;display:block}
+.ticks em{font-family:var(--mono);font-style:normal;font-size:8.5px;color:var(--ink2);margin-left:4px}
+.pclaim{font-family:var(--mono);font-size:10px;color:var(--ink2);margin-top:10px;letter-spacing:-.1px}
+.psteer{font-family:var(--mono);font-size:9.5px;color:rgba(25,25,25,.45);margin-top:8px;letter-spacing:-.1px}
+/* ---------- freshness slider ---------- */
+.fresh{border:1px solid var(--hair);background:#fff;padding:20px 20px 14px}
+.fresh-ctl{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap}
+.fresh-ctl input[type=range]{flex:1;min-width:180px;accent-color:var(--accent)}
+.fresh-read{font-family:var(--mono);font-size:11px;color:var(--ink2)}
+.fresh-read b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.fresh-row{display:grid;grid-template-columns:104px 1fr 160px;gap:12px;align-items:center;margin-bottom:10px}
+.flabel{font-family:var(--mono);font-size:10.5px;font-weight:600}
+.ftrack{height:8px;background:var(--paper);border:1px solid var(--hair)}
+.fbar{height:100%;width:0;transition:width .1s linear}
+.fstat{font-family:var(--mono);font-size:10.5px;color:var(--ink2);text-align:right;font-variant-numeric:tabular-nums}
+.fresh-note{font-family:var(--mono);font-size:9.5px;color:rgba(25,25,25,.45);margin-top:8px;letter-spacing:-.1px;line-height:1.5}
 /* ---------- tables ---------- */
 .tablewrap{overflow-x:auto;margin:32px 0}
 table{border-collapse:collapse;min-width:640px;width:100%}
 thead th{font-family:var(--sans);font-size:13px;font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(0,0,0,.18);color:var(--ink)}
-thead th.hl{color:var(--accent)}
 tbody td,tbody th{padding:10px 12px;border-bottom:1px solid var(--hair);vertical-align:top;text-align:left}
 tbody th{font-family:var(--serif);font-weight:600;font-size:15px;white-space:nowrap}
 tbody td{font-family:var(--serif);font-size:14px;line-height:1.45}
 td.num{font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
-col.hl{background:rgba(34,0,255,.05)}
 .tfoot{font-family:var(--sans);font-size:12px;color:var(--ink2);border-top:1px solid var(--hair);padding-top:14px;margin-top:0}
 /* ---------- references ---------- */
 .refs{list-style:none;display:flex;flex-direction:column;gap:6px;max-width:612px}
@@ -100,6 +124,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
   .side nav{display:none}
   article{padding-top:40px}
   h1{font-size:24px}
+  .fresh-row{grid-template-columns:88px 1fr;grid-template-rows:auto auto}
+  .fstat{grid-column:2;text-align:left}
 }
 </style>
 </head>
@@ -130,8 +156,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <section class="prose" id="summary">
       <h2>Summary<a class="anchor" href="#summary">#</a></h2>
-      <p>Devin (Cognition) and Cursor (Anysphere) are the two most prominent commercial AI coding products, and they represent architecturally opposite answers to the same question: <strong>how should an AI agent find the right code?</strong> Cursor's answer is a trained embedding index. Devin's is a generated wiki plus RL-trained agentic search — Cognition's published position is that embedding search breaks down at scale. <a href="#semantic">The semantic layer</a> breaks both down.</p>
-      <p>Neither product is open source. And as of August 2026, <strong>no rigorous head-to-head evaluation of the two exists</strong> — published comparisons are single-run anecdotes, philosophy pieces, or roundups that misattribute foundation-model benchmark scores to the products. This report summarizes what is actually documented, and pre-registers a small controlled evaluation.</p>
+      <p>Devin (Cognition) and Cursor (Anysphere) are the two most prominent commercial AI coding products, and they represent architecturally opposite answers to the same question: <strong>how should an AI agent find the right code?</strong> Cursor's answer is a trained embedding index. Devin's is a generated wiki plus RL-trained agentic search. And Anthropic's Claude Code is the control group — it pre-computes nothing at all. <a href="#semantic">The semantic layer</a> breaks all three down.</p>
+      <p>Neither Devin nor Cursor is open source. And as of August 2026, <strong>no rigorous head-to-head evaluation exists</strong> — published comparisons are single-run anecdotes, philosophy pieces, or roundups that misattribute foundation-model benchmark scores to the products. This report summarizes what is actually documented, and pre-registers a small controlled evaluation.</p>
     </section>
 
     <section class="prose" id="products">
@@ -142,170 +168,144 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <section id="semantic" style="max-width:880px">
       <div class="prose">
-        <h2>The semantic layer, side by side<a class="anchor" href="#semantic">#</a></h2>
-        <p>The semantic layer is everything a tool builds on top of raw files — indexes, wikis, retrieval models — and the machinery that decides what the agent actually sees. The two pipelines share almost nothing:</p>
+        <h2>The semantic layer: three bets<a class="anchor" href="#semantic">#</a></h2>
+        <p>The semantic layer is everything a tool builds on top of raw files — indexes, wikis, retrieval models — and the machinery that decides what the agent actually sees. Claude Code sits at the far end of the design space: no embeddings, no wiki — a frontier model drives ripgrep directly against live files, and Anthropic's stated position is that agentic search makes indexing unnecessary. Pick a tool for each side:</p>
       </div>
 
       <figure>
         <figcaption>How each tool builds and queries its semantic layer</figcaption>
-        <svg class="diagram" viewBox="0 0 880 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pipeline diagram comparing Cursor's embedding index with Devin's wiki plus agentic search">
-          <defs>
-            <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".45"/>
-            </marker>
-          </defs>
+        <div class="vs">
+          <div>
+            <select class="vs-sel" id="sel-left" aria-label="Select left tool">
+              <option value="cursor" selected>CURSOR</option>
+              <option value="devin">DEVIN</option>
+              <option value="claude">CLAUDE CODE</option>
+            </select>
+            <div id="pane-left"></div>
+          </div>
+          <div>
+            <select class="vs-sel" id="sel-right" aria-label="Select right tool">
+              <option value="cursor">CURSOR</option>
+              <option value="devin" selected>DEVIN</option>
+              <option value="claude">CLAUDE CODE</option>
+            </select>
+            <div id="pane-right"></div>
+          </div>
+        </div>
 
-          <!-- shared repo -->
-          <rect class="dbox" x="360" y="10" width="160" height="34"/>
-          <text class="dhead" x="440" y="31" text-anchor="middle">YOUR REPO</text>
-          <line class="dflow" x1="398" y1="44" x2="228" y2="88" marker-end="url(#arr)"/>
-          <line class="dflow" x1="482" y1="44" x2="652" y2="88" marker-end="url(#arr)"/>
+        <template id="tpl-cursor">
+            <div class="tool-head" style="border-color:#317cff">CURSOR<small>trained embedding index</small></div>
+            <div class="pband">INDEX TIME</div>
+            <div class="pbox"><b>AST chunking</b><span>local · syntactic chunks (fn / class level)</span></div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Custom embedding model</b><span>trained on real agent session traces</span></div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Merkle-tree sync</b><span>SHA-256 · changed subtrees · re-check ~10 min</span></div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Encrypted cloud index</b><span>vectors + chunks · client-held keys</span></div>
+            <div class="psteer">steering: ignore files only</div>
+            <div class="pband">QUERY TIME</div>
+            <div class="pbox"><b>Agent — Composer / pinned model</b><span>picks a search tool per step</span></div>
+            <div class="parr">↓</div>
+            <div class="prow">
+              <div class="pbox"><b>Semantic search</b><span>vector top-k</span></div>
+              <div class="pbox"><b>Instant Grep</b><span>exact / regex</span></div>
+              <div class="pbox"><b>Explore</b><span>parallel scan</span></div>
+            </div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Fused context</b><span>top-k chunks · decrypted client-side</span></div>
+            <div class="pclaim">vendor eval: +12.5% QA accuracy vs grep-only [1]</div>
+        </template>
 
-          <!-- column headers -->
-          <text class="dhead" x="70" y="84">CURSOR</text>
-          <text class="dheadsub" x="132" y="84">— trained embedding index</text>
-          <text class="dhead" x="510" y="84">DEVIN</text>
-          <text class="dheadsub" x="562" y="84">— wiki + agentic search</text>
+        <template id="tpl-devin">
+            <div class="tool-head" style="border-color:#f58e3a">DEVIN<small>generated wiki + agentic search</small></div>
+            <div class="pband">INDEX TIME</div>
+            <div class="pbox"><b>Wiki generation</b><span>in Cognition's cloud · reindex ~every 2 h</span></div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Devin Wiki</b><span>architecture pages · diagrams · source-linked</span></div>
+            <div class="parr">+</div>
+            <div class="pbox dashed"><b>Knowledge</b><span>org / repo notes · trigger-gated mid-session recall</span></div>
+            <div class="psteer">steering: .devin/wiki.json + Knowledge seeding</div>
+            <div class="pband">QUERY TIME</div>
+            <div class="pbox"><b>Agent — Devin · SWE-1.7</b><span>plan grounded in wiki + knowledge</span></div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Fast Context subagent</b><span>SWE-grep · RL-trained · grep/read/glob · ≤4 turns</span>
+              <div class="ticks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><em>×8 parallel calls per turn</em></div>
+            </div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Files + line ranges</b><span>precision-weighted · lean context</span></div>
+            <div class="pclaim">vendor eval: retrieval up to 20× faster [4]</div>
+        </template>
 
-          <!-- center divider -->
-          <line class="dsep" x1="440" y1="92" x2="440" y2="640"/>
+        <template id="tpl-claude">
+            <div class="tool-head" style="border-color:#15aabf">CLAUDE CODE<small>no index · pure agentic search</small></div>
+            <div class="pband">INDEX TIME</div>
+            <div class="pbox dashed"><b>∅ nothing built</b><span>no embeddings · no wiki · no server-side copy — the repo never leaves your machine</span></div>
+            <div class="psteer">steering: CLAUDE.md · skills · memory — user-written, versioned in-repo</div>
+            <div class="pband">QUERY TIME</div>
+            <div class="pbox"><b>Agent — frontier Claude model</b><span>drives search itself · no trained retriever</span></div>
+            <div class="parr">↓</div>
+            <div class="prow">
+              <div class="pbox"><b>Grep</b><span>ripgrep, live</span></div>
+              <div class="pbox"><b>Glob / Read</b><span>file walks</span></div>
+              <div class="pbox"><b>Explore</b><span>subagents ∥</span></div>
+            </div>
+            <div class="parr">↓</div>
+            <div class="pbox"><b>Live file reads</b><span>assembled per query · always current</span></div>
+            <div class="pclaim">vendor position: agentic search replaces indexing [10]</div>
+        </template>
 
-          <!-- phase labels -->
-          <text class="dphase" transform="rotate(-90 16 250)" x="16" y="250" text-anchor="middle">INDEX TIME</text>
-          <text class="dphase" transform="rotate(-90 16 528)" x="16" y="528" text-anchor="middle">QUERY TIME</text>
-
-          <!-- CURSOR index chain -->
-          <rect class="dbox" x="70" y="96" width="300" height="46"/>
-          <text class="dtitle" x="82" y="115">AST chunking</text>
-          <text class="dsub" x="82" y="131">local · syntactic chunks (fn / class level)</text>
-          <line class="dflow" x1="220" y1="142" x2="220" y2="168" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="70" y="172" width="300" height="46"/>
-          <text class="dtitle" x="82" y="191">Custom embedding model</text>
-          <text class="dsub" x="82" y="207">trained on real agent session traces</text>
-          <line class="dflow" x1="220" y1="218" x2="220" y2="244" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="70" y="248" width="300" height="46"/>
-          <text class="dtitle" x="82" y="267">Merkle-tree sync</text>
-          <text class="dsub" x="82" y="283">SHA-256 · changed subtrees only · re-check ~10 min</text>
-          <line class="dflow" x1="220" y1="294" x2="220" y2="320" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="70" y="324" width="300" height="46"/>
-          <text class="dtitle" x="82" y="343">Encrypted cloud index</text>
-          <text class="dsub" x="82" y="359">vectors + encrypted chunks · client-held keys</text>
-          <text class="dnote" x="70" y="390">steering: ignore files only</text>
-
-          <!-- DEVIN index chain -->
-          <rect class="dbox" x="510" y="96" width="300" height="46"/>
-          <text class="dtitle" x="522" y="115">Wiki generation</text>
-          <text class="dsub" x="522" y="131">in Cognition's cloud · reindex ~every 2 h</text>
-          <line class="dflow" x1="660" y1="142" x2="660" y2="168" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="510" y="172" width="300" height="46"/>
-          <text class="dtitle" x="522" y="191">Devin Wiki</text>
-          <text class="dsub" x="522" y="207">architecture pages · diagrams · source-linked</text>
-          <text class="dnote" x="818" y="191" text-anchor="end"></text>
-
-          <text class="dhead" x="660" y="243" text-anchor="middle" fill-opacity=".45">+</text>
-
-          <rect class="dbox" x="510" y="252" width="300" height="46" stroke-dasharray="4 3"/>
-          <text class="dtitle" x="522" y="271">Knowledge</text>
-          <text class="dsub" x="522" y="287">org / repo notes · trigger-gated mid-session recall</text>
-          <text class="dnote" x="510" y="316">steering: .devin/wiki.json + Knowledge seeding</text>
-
-          <!-- phase separator -->
-          <line class="dsep" x1="40" y1="398" x2="850" y2="398"/>
-
-          <!-- CURSOR query -->
-          <rect class="dbox" x="70" y="424" width="300" height="42"/>
-          <text class="dtitle" x="82" y="441">Agent — Composer / pinned model</text>
-          <text class="dsub" x="82" y="456">picks a search tool per step</text>
-          <line class="dflow" x1="220" y1="466" x2="116" y2="492" marker-end="url(#arr)"/>
-          <line class="dflow" x1="220" y1="466" x2="220" y2="492" marker-end="url(#arr)"/>
-          <line class="dflow" x1="220" y1="466" x2="324" y2="492" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="70" y="496" width="92" height="58"/>
-          <text class="dtitle" x="76" y="514" font-size="11">Semantic</text>
-          <text class="dtitle" x="76" y="527" font-size="11">search</text>
-          <text class="dsub" x="76" y="544">vector top-k</text>
-          <rect class="dbox" x="174" y="496" width="92" height="58"/>
-          <text class="dtitle" x="180" y="514" font-size="11">Instant</text>
-          <text class="dtitle" x="180" y="527" font-size="11">Grep</text>
-          <text class="dsub" x="180" y="544">exact / regex</text>
-          <rect class="dbox" x="278" y="496" width="92" height="58"/>
-          <text class="dtitle" x="284" y="514" font-size="11">Explore</text>
-          <text class="dtitle" x="284" y="527" font-size="11">subagent</text>
-          <text class="dsub" x="284" y="544">parallel scan</text>
-
-          <line class="dflow" x1="116" y1="554" x2="216" y2="580" marker-end="url(#arr)"/>
-          <line class="dflow" x1="220" y1="554" x2="220" y2="580" marker-end="url(#arr)"/>
-          <line class="dflow" x1="324" y1="554" x2="224" y2="580" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="70" y="584" width="300" height="46"/>
-          <text class="dtitle" x="82" y="603">Fused context</text>
-          <text class="dsub" x="82" y="619">top-k chunks · decrypted client-side</text>
-          <text class="dclaim" x="70" y="660">vendor eval: +12.5% QA accuracy vs grep-only</text>
-
-          <!-- DEVIN query -->
-          <rect class="dbox" x="510" y="424" width="300" height="42"/>
-          <text class="dtitle" x="522" y="441">Agent — Devin · SWE-1.7</text>
-          <text class="dsub" x="522" y="456">plan grounded in wiki + knowledge</text>
-          <line class="dflow" x1="660" y1="466" x2="660" y2="492" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="510" y="496" width="300" height="58"/>
-          <text class="dtitle" x="522" y="514">Fast Context subagent</text>
-          <text class="dsub" x="522" y="530">SWE-grep · grep/read/glob toolset · ≤4 turns</text>
-          <g stroke="#4263eb" stroke-width="2">
-            <line x1="522" y1="540" x2="522" y2="550"/><line x1="536" y1="540" x2="536" y2="550"/>
-            <line x1="550" y1="540" x2="550" y2="550"/><line x1="564" y1="540" x2="564" y2="550"/>
-            <line x1="578" y1="540" x2="578" y2="550"/><line x1="592" y1="540" x2="592" y2="550"/>
-            <line x1="606" y1="540" x2="606" y2="550"/><line x1="620" y1="540" x2="620" y2="550"/>
-          </g>
-          <text class="dsub" x="632" y="549">×8 parallel calls per turn</text>
-
-          <line class="dflow" x1="660" y1="554" x2="660" y2="580" marker-end="url(#arr)"/>
-
-          <rect class="dbox" x="510" y="584" width="300" height="46"/>
-          <text class="dtitle" x="522" y="603">Files + line ranges</text>
-          <text class="dsub" x="522" y="619">precision-weighted · lean context</text>
-          <text class="dclaim" x="510" y="660">vendor eval: retrieval up to 20× faster</text>
-        </svg>
-        <p class="fig-note">Sources: Cursor semsearch + indexing posts [1][2][3]; Cognition SWE-grep + DeepWiki docs [4][5][6]. Both "vendor eval" claims are internal benchmarks.</p>
+        <p class="fig-note">Sources: Cursor semsearch + indexing posts [1][2][3]; Cognition SWE-grep + DeepWiki docs [4][5][6]; Anthropic Claude Code best practices [10]. "Vendor eval" claims are internal benchmarks.</p>
       </figure>
 
       <figure>
         <figcaption>Index freshness after a code change</figcaption>
-        <svg class="diagram" viewBox="0 0 880 122" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline comparing Cursor's 10-minute re-sync cadence with Devin's 2-hour wiki reindex">
-          <text class="dsub" x="120" y="44" fill="#317cff" fill-opacity="1">Cursor · Merkle re-check every ~10 min</text>
-          <text class="dsub" x="840" y="44" text-anchor="end" fill="#f58e3a" fill-opacity="1">Devin · wiki reindex ~every 2 h</text>
-          <line class="axis" x1="120" y1="70" x2="840" y2="70" stroke="#000" stroke-opacity=".1" stroke-width="1.2"/>
-          <g fill="#317cff">
-            <rect x="177" y="67" width="6" height="6"/><rect x="237" y="67" width="6" height="6"/>
-            <rect x="297" y="67" width="6" height="6"/><rect x="357" y="67" width="6" height="6"/>
-            <rect x="417" y="67" width="6" height="6"/><rect x="477" y="67" width="6" height="6"/>
-            <rect x="537" y="67" width="6" height="6"/><rect x="597" y="67" width="6" height="6"/>
-            <rect x="657" y="67" width="6" height="6"/><rect x="717" y="67" width="6" height="6"/>
-            <rect x="777" y="67" width="6" height="6"/>
-          </g>
-          <rect x="835" y="65" width="10" height="10" fill="#f58e3a"/>
-          <g class="axlabel" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#191919" fill-opacity=".56">
-            <text x="120" y="90">0</text><text x="300" y="90">30 min</text><text x="480" y="90">60 min</text>
-            <text x="660" y="90">90 min</text><text x="840" y="90">120 min</text>
-          </g>
-          <text class="dnote" x="480" y="112" text-anchor="middle">between reindexes Devin's wiki can be up to ~2 h stale — Cursor's index at most ~10 min</text>
+        <div class="fresh">
+          <div class="fresh-ctl">
+            <input type="range" id="fslider" min="0" max="120" value="47" step="1" aria-label="Minutes since last code change">
+            <span class="fresh-read">t = <b id="fval">47</b> min since last code change</span>
+          </div>
+          <div class="fresh-row"><span class="flabel" style="color:#317cff">CURSOR</span><div class="ftrack"><div class="fbar" id="fb-cursor" style="background:#317cff"></div></div><span class="fstat" id="fs-cursor"></span></div>
+          <div class="fresh-row"><span class="flabel" style="color:#f58e3a">DEVIN</span><div class="ftrack"><div class="fbar" id="fb-devin" style="background:#f58e3a"></div></div><span class="fstat" id="fs-devin"></span></div>
+          <div class="fresh-row"><span class="flabel" style="color:#15aabf">CLAUDE CODE</span><div class="ftrack"><div class="fbar" id="fb-claude" style="background:#15aabf"></div></div><span class="fstat" id="fs-claude"></span></div>
+          <div class="fresh-note">bar = worst-case staleness of each tool's view of the repo at time t · Cursor re-syncs ~every 10 min · Devin's wiki reindexes ~every 2 h · Claude Code reads files live</div>
+        </div>
+        <p class="fig-note">Cadences as documented: Cursor Merkle re-check [2]; Devin reindex "every couple hours" [5]; Claude Code has no index to refresh [10]. Probes A7/A8 test this window directly.</p>
+      </figure>
+
+      <figure>
+        <figcaption>The design space in one axis</figcaption>
+        <svg class="diagram" viewBox="0 0 880 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Spectrum of how much codebase understanding each tool pre-computes">
+          <defs>
+            <marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".35"/>
+            </marker>
+          </defs>
+          <line x1="120" y1="84" x2="830" y2="84" stroke="#000" stroke-opacity=".3" stroke-width="1" marker-end="url(#arr2)"/>
+          <text class="dnote" x="840" y="108" text-anchor="end">amount of understanding pre-computed →</text>
+          <rect x="156" y="80" width="8" height="8" fill="#15aabf"/>
+          <text class="dhead" x="160" y="52" text-anchor="middle" fill="#15aabf">CLAUDE CODE</text>
+          <text class="dsub" x="160" y="66" text-anchor="middle">nothing — search live at query time</text>
+          <rect x="476" y="80" width="8" height="8" fill="#f58e3a"/>
+          <text class="dhead" x="480" y="52" text-anchor="middle" fill="#f58e3a">DEVIN</text>
+          <text class="dsub" x="480" y="66" text-anchor="middle">wiki pre-built · trained searcher on demand</text>
+          <rect x="796" y="80" width="8" height="8" fill="#317cff"/>
+          <text class="dhead" x="838" y="52" text-anchor="end" fill="#317cff">CURSOR</text>
+          <text class="dsub" x="838" y="66" text-anchor="end">full embedding index, built ahead</text>
+          <text class="dnote" x="120" y="132">← fresher context · more tokens per query</text>
+          <text class="dnote" x="838" y="132" text-anchor="end">faster first answer · more staleness risk →</text>
         </svg>
-        <p class="fig-note">Cadences as documented: Cursor Merkle hash re-check [2]; Devin repo reindex "every couple hours" [5]. Probes A7/A8 test this window directly.</p>
       </figure>
 
       <div class="tablewrap">
         <table>
-          <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
-          <thead><tr><th></th><th>Cursor</th><th>Devin</th></tr></thead>
+          <colgroup><col style="width:22%"><col style="width:26%"><col style="width:26%"><col style="width:26%"></colgroup>
+          <thead><tr><th></th><th>Cursor</th><th>Devin</th><th>Claude Code</th></tr></thead>
           <tbody>
-            <tr><th>Tuning bias</th><td>Recall-friendly — semantic match bridges vocabulary gaps</td><td>Precision-weighted — RL reward penalizes irrelevant context</td></tr>
-            <tr><th>Pre-computed understanding</th><td>None — the index is chunks</td><td>Wiki: architecture diagrams, source-linked pages</td></tr>
-            <tr><th>User steerability</th><td>Ignore files only</td><td><code style="font-family:var(--mono);font-size:12px">.devin/wiki.json</code> + Knowledge system (trigger-gated notes)</td></tr>
-            <tr><th>Server-side footprint</th><td>Encrypted chunks + embeddings, client-held keys</td><td>Full repo access in Cognition's cloud</td></tr>
+            <tr><th>Tuning bias</th><td>Recall-friendly — semantic match bridges vocabulary gaps</td><td>Precision-weighted — RL reward penalizes irrelevant context</td><td>None learned — frontier-model judgment over plain ripgrep</td></tr>
+            <tr><th>Pre-computed understanding</th><td>None — the index is chunks</td><td>Wiki: architecture diagrams, source-linked pages</td><td>None — only what you write in CLAUDE.md</td></tr>
+            <tr><th>User steerability</th><td>Ignore files only</td><td><code style="font-family:var(--mono);font-size:12px">.devin/wiki.json</code> + Knowledge system</td><td>CLAUDE.md + skills + memory — fully user-owned</td></tr>
+            <tr><th>Server-side footprint</th><td>Encrypted chunks + embeddings, client-held keys</td><td>Full repo access in Cognition's cloud</td><td>No index — code read per request, stored nowhere</td></tr>
           </tbody>
         </table>
       </div>
@@ -313,7 +313,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <figure>
         <figcaption>Cursor: time-to-first-query, before → after shared team indexes</figcaption>
         <svg class="chart-svg" viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Log-scale bar chart of Cursor indexing time to first query">
-          <!-- log scale: 0.1s .. 100000s → x 150..840 (115px per decade) -->
           <line class="axis" x1="150" y1="20" x2="150" y2="200"/>
           <line class="axis" x1="150" y1="200" x2="840" y2="200"/>
           <g class="axlabel" text-anchor="middle">
@@ -321,25 +320,21 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <text x="495" y="216">100s</text><text x="610" y="216">1000s</text><text x="725" y="216">10⁴s</text><text x="840" y="216">10⁵s</text>
           </g>
           <text class="axlabel" x="840" y="238" text-anchor="end">seconds, log scale →</text>
-          <!-- median: 7.87s -> x=252 ; 0.525s -> x=233. bars start x=150 -->
           <text class="rowlab" x="140" y="52" text-anchor="end">median</text>
           <rect x="150" y="38" width="102" height="9" fill="#f58e3a"/>
           <rect x="150" y="50" width="83" height="9" fill="#317cff"/>
           <text class="val" x="258" y="46">7.87s</text>
           <text class="val" x="239" y="59" fill="#317cff">525ms</text>
-          <!-- p90: 169.2s -> x=522 ; 1.87s -> x=296 -->
           <text class="rowlab" x="140" y="112" text-anchor="end">p90</text>
           <rect x="150" y="98" width="372" height="9" fill="#f58e3a"/>
           <rect x="150" y="110" width="146" height="9" fill="#317cff"/>
           <text class="val" x="528" y="106">2.82min</text>
           <text class="val" x="302" y="119" fill="#317cff">1.87s</text>
-          <!-- p99: 14508s -> x=744 ; 21s -> x=417 -->
           <text class="rowlab" x="140" y="172" text-anchor="end">p99</text>
           <rect x="150" y="158" width="594" height="9" fill="#f58e3a"/>
           <rect x="150" y="170" width="267" height="9" fill="#317cff"/>
           <text class="val" x="750" y="166">4.03h</text>
           <text class="val" x="423" y="179" fill="#317cff">21s</text>
-          <!-- series labels -->
           <text class="series" x="760" y="46" fill="#f58e3a">before</text>
           <text class="series" x="760" y="60" fill="#317cff">after</text>
         </svg>
@@ -349,7 +344,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <figure>
         <figcaption>Devin: retrieval model serving speed</figcaption>
         <svg class="chart-svg" viewBox="0 0 880 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bar chart of SWE-grep serving speed in tokens per second">
-          <!-- linear 0..3000 tok/s → x 220..820 (0.2px per tok/s) -->
           <line class="axis" x1="220" y1="20" x2="220" y2="140"/>
           <line class="axis" x1="220" y1="140" x2="820" y2="140"/>
           <g class="axlabel" text-anchor="middle">
@@ -370,7 +364,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </figure>
 
       <div class="prose">
-        <p>Each vendor's blog argues the other's architecture is inferior, and each cites its own internal evals. <strong>They cannot both be right in general — which is what makes this testable.</strong></p>
+        <p>All three vendors publish reasons the others' approach fails: Cursor says semantic search beats grep-only agents, Cognition says embeddings break down at scale, Anthropic says a strong enough model needs no index. <strong>At most one of them is right in general — which is what makes this testable.</strong></p>
       </div>
     </section>
 
@@ -386,7 +380,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <section class="prose" id="eval">
       <h2>Planned evaluation<a class="anchor" href="#eval">#</a></h2>
-      <p>A private, freshly written trap repo with planted ground truth. Nine semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing), three end-to-end tasks, three runs per task, fact-recall and file-level precision/recall scoring, cost and wall-clock logged per run.</p>
+      <p>A private, freshly written trap repo with planted ground truth. Nine semantic-layer probes (synonym traps, stale-docs traps, split logic, index-freshness timing), three end-to-end tasks, three runs per task, fact-recall and file-level precision/recall scoring, cost and wall-clock logged per run. A Claude Code arm runs the same probes at marginal cost — the natural no-index control.</p>
       <p>Six hypotheses, pre-registered from the architectures before any run:</p>
       <ul class="plain">
         <li><strong>H1</strong> — Cursor wins synonym/concept probes: embeddings bridge vocabulary; grep needs the right string.</li>
@@ -430,6 +424,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
         <li><span class="n">[7]</span><a href="https://cognition.com/blog/swe-1-6">Cognition — SWE-1.6</a></li>
         <li><span class="n">[8]</span><a href="https://www.answer.ai/posts/2025-01-08-devin.html">Answer.AI — Thoughts on a Month with Devin</a>, Jan 2025</li>
         <li><span class="n">[9]</span><a href="https://github.com/BrandeisPatrick/devin-vs-cursor/tree/main/research">Full annotated research notes with confidence tags</a></li>
+        <li><span class="n">[10]</span><a href="https://www.anthropic.com/engineering/claude-code-best-practices">Anthropic — Claude Code Best Practices (agentic search, no indexing)</a>, Apr 2025</li>
       </ol>
     </section>
 
@@ -502,7 +497,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
         if(g!==' ')ctx.fillText(g,i*CELL,j*CELL);
       }
     }
-    // blobs
     const pts=blobs.map(b=>{
       const x=(b.cx+b.rx*Math.sin(t*b.sx*.21+b.px))*W;
       const y=(b.cy+b.ry*Math.cos(t*b.sy*.17+b.py))*H;
@@ -510,7 +504,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       return {x,y,v};
     });
     ctx.strokeStyle='#111';ctx.lineWidth=1.5;
-    // dotted connectors
     ctx.setLineDash([3,7]);
     for(let a=0;a<pts.length;a++)for(let b=a+1;b<pts.length;b++){
       const dx=pts[a].x-pts[b].x,dy=pts[a].y-pts[b].y;
@@ -519,7 +512,6 @@ footer a:hover{color:var(--accent);text-decoration:none}
       }
     }
     ctx.setLineDash([]);
-    // markers + labels
     for(const p of pts){
       ctx.fillStyle='rgba(17,17,17,.15)';
       ctx.fillRect(p.x-5,p.y-5,10,10);
@@ -544,6 +536,40 @@ footer a:hover{color:var(--accent);text-decoration:none}
   if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>{resize();reduced?draw(9000):requestAnimationFrame(loop)})}
   resize();
   reduced?draw(9000):requestAnimationFrame(loop);
+})();
+
+/* Interactive pipeline comparator — dropdown per side */
+(function(){
+  function render(side){
+    const sel=document.getElementById('sel-'+side);
+    const pane=document.getElementById('pane-'+side);
+    if(!sel||!pane)return;
+    pane.innerHTML=document.getElementById('tpl-'+sel.value).innerHTML;
+  }
+  ['left','right'].forEach(side=>{
+    const sel=document.getElementById('sel-'+side);
+    if(sel){sel.addEventListener('change',()=>render(side));render(side);}
+  });
+})();
+
+/* Freshness slider — worst-case staleness at time t */
+(function(){
+  const s=document.getElementById('fslider');
+  if(!s)return;
+  function set(k,v,txt){
+    document.getElementById('fb-'+k).style.width=(v/120*100)+'%';
+    document.getElementById('fs-'+k).textContent=txt;
+  }
+  function upd(){
+    const t=+s.value;
+    document.getElementById('fval').textContent=t;
+    const c=t%10, d=t%120;
+    set('cursor',c,'index '+c+' min stale');
+    set('devin',d,'wiki '+d+' min stale');
+    set('claude',0,'0 min — live read');
+  }
+  s.addEventListener('input',upd);
+  upd();
 })();
 </script>
 </body>

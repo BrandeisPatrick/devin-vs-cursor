@@ -119,6 +119,7 @@ Re-run 3 probes on Devin with seeded Knowledge + `.devin/wiki.json` notes vs bar
 | Verdict lens | Semantic layer vs end-to-end vs equal | Equal weight, two scored dimensions |
 | Scale | Pilot: 9 probes + 3 tasks × 3 runs × 2 tools = **72 runs** | Pilot first; Track C and Desktop arm only if close |
 | Accounts/budget | Devin Pro $20 (opaque allowance, may need top-ups) + Cursor Pro $20 (~$20 usage incl.) — **pilot ballpark $50–250 total** | You set up both accounts; I can't create accounts or enter payment |
+| Claude Code as third arm? | Yes / No | **Yes** — same probes at marginal cost, and it's the no-index control group (pure agentic search, nothing pre-computed) |
 
 ## 7. Phases
 
