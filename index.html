@@ -62,6 +62,18 @@ figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--in
 .chart-svg .val{font-family:var(--mono);font-size:11px;font-weight:500;fill:#191919}
 .chart-svg .series{font-family:var(--sans);font-size:11px;font-weight:500}
 .chart-svg .rowlab{font-family:var(--sans);font-size:12px;fill:#191919}
+/* ---------- pipeline diagram ---------- */
+.diagram{width:100%;height:auto;display:block}
+.diagram .dbox{fill:#fff;stroke:#000;stroke-opacity:.3;stroke-width:1}
+.diagram .dtitle{font-family:var(--sans);font-size:12.5px;font-weight:500;fill:#191919}
+.diagram .dsub{font-family:var(--mono);font-size:9.5px;fill:rgba(25,25,25,.56);letter-spacing:-.1px}
+.diagram .dhead{font-family:var(--mono);font-size:12px;font-weight:600;fill:#000}
+.diagram .dheadsub{font-family:var(--mono);font-size:10px;fill:rgba(25,25,25,.56)}
+.diagram .dphase{font-family:var(--mono);font-size:10px;letter-spacing:.1em;fill:rgba(25,25,25,.4)}
+.diagram .dflow{stroke:#000;stroke-opacity:.45;stroke-width:1;fill:none}
+.diagram .dsep{stroke:#000;stroke-opacity:.12;stroke-width:1;stroke-dasharray:3 6}
+.diagram .dclaim{font-family:var(--mono);font-size:10px;fill:rgba(25,25,25,.56)}
+.diagram .dnote{font-family:var(--mono);font-size:9.5px;fill:rgba(25,25,25,.45)}
 /* ---------- tables ---------- */
 .tablewrap{overflow-x:auto;margin:32px 0}
 table{border-collapse:collapse;min-width:640px;width:100%}
@@ -118,11 +130,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
 
     <section class="prose" id="summary">
       <h2>Summary<a class="anchor" href="#summary">#</a></h2>
-      <p>Devin (Cognition) and Cursor (Anysphere) are the two most prominent commercial AI coding products, and they represent architecturally opposite answers to the same question: <strong>how should an AI agent find the right code?</strong></p>
-      <ul class="plain">
-        <li><strong>Cursor bets on a trained embedding index.</strong> Every repo is chunked, embedded with a custom model trained on real agent sessions, and synced to the cloud via Merkle trees. Retrieval is vector search plus grep, fused by the agent.</li>
-        <li><strong>Devin bets against embeddings entirely.</strong> Cognition's published position is that embedding search breaks down at scale. Instead: an auto-generated wiki as a pre-computed semantic layer, plus SWE-grep — an RL-trained retrieval model that fires up to 8 parallel grep/read/glob calls per turn.</li>
-      </ul>
+      <p>Devin (Cognition) and Cursor (Anysphere) are the two most prominent commercial AI coding products, and they represent architecturally opposite answers to the same question: <strong>how should an AI agent find the right code?</strong> Cursor's answer is a trained embedding index. Devin's is a generated wiki plus RL-trained agentic search — Cognition's published position is that embedding search breaks down at scale. <a href="#semantic">The semantic layer</a> breaks both down.</p>
       <p>Neither product is open source. And as of August 2026, <strong>no rigorous head-to-head evaluation of the two exists</strong> — published comparisons are single-run anecdotes, philosophy pieces, or roundups that misattribute foundation-model benchmark scores to the products. This report summarizes what is actually documented, and pre-registers a small controlled evaluation.</p>
     </section>
 
@@ -135,25 +143,171 @@ footer a:hover{color:var(--accent);text-decoration:none}
     <section id="semantic" style="max-width:880px">
       <div class="prose">
         <h2>The semantic layer, side by side<a class="anchor" href="#semantic">#</a></h2>
-        <p>"Semantic layer" here means everything a tool builds on top of raw files to understand a codebase: indexes, wikis, retrieval models, and the machinery that decides what the agent sees. The two designs disagree on nearly every dimension.</p>
+        <p>The semantic layer is everything a tool builds on top of raw files — indexes, wikis, retrieval models — and the machinery that decides what the agent actually sees. The two pipelines share almost nothing:</p>
       </div>
+
+      <figure>
+        <figcaption>How each tool builds and queries its semantic layer</figcaption>
+        <svg class="diagram" viewBox="0 0 880 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pipeline diagram comparing Cursor's embedding index with Devin's wiki plus agentic search">
+          <defs>
+            <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L8,4 L0,8 z" fill="#000" fill-opacity=".45"/>
+            </marker>
+          </defs>
+
+          <!-- shared repo -->
+          <rect class="dbox" x="360" y="10" width="160" height="34"/>
+          <text class="dhead" x="440" y="31" text-anchor="middle">YOUR REPO</text>
+          <line class="dflow" x1="398" y1="44" x2="228" y2="88" marker-end="url(#arr)"/>
+          <line class="dflow" x1="482" y1="44" x2="652" y2="88" marker-end="url(#arr)"/>
+
+          <!-- column headers -->
+          <text class="dhead" x="70" y="84">CURSOR</text>
+          <text class="dheadsub" x="132" y="84">— trained embedding index</text>
+          <text class="dhead" x="510" y="84">DEVIN</text>
+          <text class="dheadsub" x="562" y="84">— wiki + agentic search</text>
+
+          <!-- center divider -->
+          <line class="dsep" x1="440" y1="92" x2="440" y2="640"/>
+
+          <!-- phase labels -->
+          <text class="dphase" transform="rotate(-90 16 250)" x="16" y="250" text-anchor="middle">INDEX TIME</text>
+          <text class="dphase" transform="rotate(-90 16 528)" x="16" y="528" text-anchor="middle">QUERY TIME</text>
+
+          <!-- CURSOR index chain -->
+          <rect class="dbox" x="70" y="96" width="300" height="46"/>
+          <text class="dtitle" x="82" y="115">AST chunking</text>
+          <text class="dsub" x="82" y="131">local · syntactic chunks (fn / class level)</text>
+          <line class="dflow" x1="220" y1="142" x2="220" y2="168" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="70" y="172" width="300" height="46"/>
+          <text class="dtitle" x="82" y="191">Custom embedding model</text>
+          <text class="dsub" x="82" y="207">trained on real agent session traces</text>
+          <line class="dflow" x1="220" y1="218" x2="220" y2="244" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="70" y="248" width="300" height="46"/>
+          <text class="dtitle" x="82" y="267">Merkle-tree sync</text>
+          <text class="dsub" x="82" y="283">SHA-256 · changed subtrees only · re-check ~10 min</text>
+          <line class="dflow" x1="220" y1="294" x2="220" y2="320" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="70" y="324" width="300" height="46"/>
+          <text class="dtitle" x="82" y="343">Encrypted cloud index</text>
+          <text class="dsub" x="82" y="359">vectors + encrypted chunks · client-held keys</text>
+          <text class="dnote" x="70" y="390">steering: ignore files only</text>
+
+          <!-- DEVIN index chain -->
+          <rect class="dbox" x="510" y="96" width="300" height="46"/>
+          <text class="dtitle" x="522" y="115">Wiki generation</text>
+          <text class="dsub" x="522" y="131">in Cognition's cloud · reindex ~every 2 h</text>
+          <line class="dflow" x1="660" y1="142" x2="660" y2="168" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="510" y="172" width="300" height="46"/>
+          <text class="dtitle" x="522" y="191">Devin Wiki</text>
+          <text class="dsub" x="522" y="207">architecture pages · diagrams · source-linked</text>
+          <text class="dnote" x="818" y="191" text-anchor="end"></text>
+
+          <text class="dhead" x="660" y="243" text-anchor="middle" fill-opacity=".45">+</text>
+
+          <rect class="dbox" x="510" y="252" width="300" height="46" stroke-dasharray="4 3"/>
+          <text class="dtitle" x="522" y="271">Knowledge</text>
+          <text class="dsub" x="522" y="287">org / repo notes · trigger-gated mid-session recall</text>
+          <text class="dnote" x="510" y="316">steering: .devin/wiki.json + Knowledge seeding</text>
+
+          <!-- phase separator -->
+          <line class="dsep" x1="40" y1="398" x2="850" y2="398"/>
+
+          <!-- CURSOR query -->
+          <rect class="dbox" x="70" y="424" width="300" height="42"/>
+          <text class="dtitle" x="82" y="441">Agent — Composer / pinned model</text>
+          <text class="dsub" x="82" y="456">picks a search tool per step</text>
+          <line class="dflow" x1="220" y1="466" x2="116" y2="492" marker-end="url(#arr)"/>
+          <line class="dflow" x1="220" y1="466" x2="220" y2="492" marker-end="url(#arr)"/>
+          <line class="dflow" x1="220" y1="466" x2="324" y2="492" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="70" y="496" width="92" height="58"/>
+          <text class="dtitle" x="76" y="514" font-size="11">Semantic</text>
+          <text class="dtitle" x="76" y="527" font-size="11">search</text>
+          <text class="dsub" x="76" y="544">vector top-k</text>
+          <rect class="dbox" x="174" y="496" width="92" height="58"/>
+          <text class="dtitle" x="180" y="514" font-size="11">Instant</text>
+          <text class="dtitle" x="180" y="527" font-size="11">Grep</text>
+          <text class="dsub" x="180" y="544">exact / regex</text>
+          <rect class="dbox" x="278" y="496" width="92" height="58"/>
+          <text class="dtitle" x="284" y="514" font-size="11">Explore</text>
+          <text class="dtitle" x="284" y="527" font-size="11">subagent</text>
+          <text class="dsub" x="284" y="544">parallel scan</text>
+
+          <line class="dflow" x1="116" y1="554" x2="216" y2="580" marker-end="url(#arr)"/>
+          <line class="dflow" x1="220" y1="554" x2="220" y2="580" marker-end="url(#arr)"/>
+          <line class="dflow" x1="324" y1="554" x2="224" y2="580" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="70" y="584" width="300" height="46"/>
+          <text class="dtitle" x="82" y="603">Fused context</text>
+          <text class="dsub" x="82" y="619">top-k chunks · decrypted client-side</text>
+          <text class="dclaim" x="70" y="660">vendor eval: +12.5% QA accuracy vs grep-only</text>
+
+          <!-- DEVIN query -->
+          <rect class="dbox" x="510" y="424" width="300" height="42"/>
+          <text class="dtitle" x="522" y="441">Agent — Devin · SWE-1.7</text>
+          <text class="dsub" x="522" y="456">plan grounded in wiki + knowledge</text>
+          <line class="dflow" x1="660" y1="466" x2="660" y2="492" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="510" y="496" width="300" height="58"/>
+          <text class="dtitle" x="522" y="514">Fast Context subagent</text>
+          <text class="dsub" x="522" y="530">SWE-grep · grep/read/glob toolset · ≤4 turns</text>
+          <g stroke="#4263eb" stroke-width="2">
+            <line x1="522" y1="540" x2="522" y2="550"/><line x1="536" y1="540" x2="536" y2="550"/>
+            <line x1="550" y1="540" x2="550" y2="550"/><line x1="564" y1="540" x2="564" y2="550"/>
+            <line x1="578" y1="540" x2="578" y2="550"/><line x1="592" y1="540" x2="592" y2="550"/>
+            <line x1="606" y1="540" x2="606" y2="550"/><line x1="620" y1="540" x2="620" y2="550"/>
+          </g>
+          <text class="dsub" x="632" y="549">×8 parallel calls per turn</text>
+
+          <line class="dflow" x1="660" y1="554" x2="660" y2="580" marker-end="url(#arr)"/>
+
+          <rect class="dbox" x="510" y="584" width="300" height="46"/>
+          <text class="dtitle" x="522" y="603">Files + line ranges</text>
+          <text class="dsub" x="522" y="619">precision-weighted · lean context</text>
+          <text class="dclaim" x="510" y="660">vendor eval: retrieval up to 20× faster</text>
+        </svg>
+        <p class="fig-note">Sources: Cursor semsearch + indexing posts [1][2][3]; Cognition SWE-grep + DeepWiki docs [4][5][6]. Both "vendor eval" claims are internal benchmarks.</p>
+      </figure>
+
+      <figure>
+        <figcaption>Index freshness after a code change</figcaption>
+        <svg class="diagram" viewBox="0 0 880 122" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline comparing Cursor's 10-minute re-sync cadence with Devin's 2-hour wiki reindex">
+          <text class="dsub" x="120" y="44" fill="#317cff" fill-opacity="1">Cursor · Merkle re-check every ~10 min</text>
+          <text class="dsub" x="840" y="44" text-anchor="end" fill="#f58e3a" fill-opacity="1">Devin · wiki reindex ~every 2 h</text>
+          <line class="axis" x1="120" y1="70" x2="840" y2="70" stroke="#000" stroke-opacity=".1" stroke-width="1.2"/>
+          <g fill="#317cff">
+            <rect x="177" y="67" width="6" height="6"/><rect x="237" y="67" width="6" height="6"/>
+            <rect x="297" y="67" width="6" height="6"/><rect x="357" y="67" width="6" height="6"/>
+            <rect x="417" y="67" width="6" height="6"/><rect x="477" y="67" width="6" height="6"/>
+            <rect x="537" y="67" width="6" height="6"/><rect x="597" y="67" width="6" height="6"/>
+            <rect x="657" y="67" width="6" height="6"/><rect x="717" y="67" width="6" height="6"/>
+            <rect x="777" y="67" width="6" height="6"/>
+          </g>
+          <rect x="835" y="65" width="10" height="10" fill="#f58e3a"/>
+          <g class="axlabel" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#191919" fill-opacity=".56">
+            <text x="120" y="90">0</text><text x="300" y="90">30 min</text><text x="480" y="90">60 min</text>
+            <text x="660" y="90">90 min</text><text x="840" y="90">120 min</text>
+          </g>
+          <text class="dnote" x="480" y="112" text-anchor="middle">between reindexes Devin's wiki can be up to ~2 h stale — Cursor's index at most ~10 min</text>
+        </svg>
+        <p class="fig-note">Cadences as documented: Cursor Merkle hash re-check [2]; Devin repo reindex "every couple hours" [5]. Probes A7/A8 test this window directly.</p>
+      </figure>
 
       <div class="tablewrap">
         <table>
           <colgroup><col style="width:22%"><col style="width:39%"><col style="width:39%"></colgroup>
           <thead><tr><th></th><th>Cursor</th><th>Devin</th></tr></thead>
           <tbody>
-            <tr><th>Core mechanism</th><td>Embedding index — custom model trained on agent session traces</td><td>Generated wiki + RL agentic search (SWE-grep)</td></tr>
-            <tr><th>Index freshness</th><td class="num">~10 min <span style="font-family:var(--serif);color:var(--ink2)">Merkle re-check</span></td><td class="num">~2 h <span style="font-family:var(--serif);color:var(--ink2)">wiki reindex</span></td></tr>
-            <tr><th>Query-time search</th><td>Semantic search + Instant Grep + Explore subagent</td><td>Fast Context subagent: ≤8 parallel grep/read/glob per turn, ≤4 turns</td></tr>
             <tr><th>Tuning bias</th><td>Recall-friendly — semantic match bridges vocabulary gaps</td><td>Precision-weighted — RL reward penalizes irrelevant context</td></tr>
             <tr><th>Pre-computed understanding</th><td>None — the index is chunks</td><td>Wiki: architecture diagrams, source-linked pages</td></tr>
             <tr><th>User steerability</th><td>Ignore files only</td><td><code style="font-family:var(--mono);font-size:12px">.devin/wiki.json</code> + Knowledge system (trigger-gated notes)</td></tr>
             <tr><th>Server-side footprint</th><td>Encrypted chunks + embeddings, client-held keys</td><td>Full repo access in Cognition's cloud</td></tr>
-            <tr><th>Own eval claim</th><td class="num">+12.5% <span style="font-family:var(--serif);color:var(--ink2)">QA accuracy vs grep-only</span></td><td class="num">20× <span style="font-family:var(--serif);color:var(--ink2)">faster retrieval vs frontier models</span></td></tr>
           </tbody>
         </table>
-        <p class="tfoot">Both "own eval claim" rows are vendor-published numbers from internal benchmarks, not independent measurements.</p>
       </div>
 
       <figure>
@@ -216,7 +370,7 @@ footer a:hover{color:var(--accent);text-decoration:none}
       </figure>
 
       <div class="prose">
-        <p>The philosophical split is real and documented. Cursor's semantic-search post argues purpose-trained embeddings beat grep-based agents; Cognition's Riptide and SWE-grep posts argue LLM-driven parallel search beats "state-of-the-art embedding-based systems." Both cite internal evals. <strong>They cannot both be right in general — which is what makes this testable.</strong></p>
+        <p>Each vendor's blog argues the other's architecture is inferior, and each cites its own internal evals. <strong>They cannot both be right in general — which is what makes this testable.</strong></p>
       </div>
     </section>
 
