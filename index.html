@@ -66,13 +66,15 @@ figcaption{font-family:var(--sans);font-size:17px;font-weight:500;color:var(--in
 .diagram .dhead{font-family:var(--mono);font-size:12px;font-weight:600;fill:#000}
 .diagram .dnote{font-family:var(--mono);font-size:9.5px;fill:rgba(25,25,25,.45)}
 /* ---------- interactive comparator ---------- */
-.vs{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.vs{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;align-items:start}
+.vs-side{display:contents}
+.vs-side:first-child>*{grid-column:1}
+.vs-side:last-child>*{grid-column:2}
+.r1{grid-row:1}.r2{grid-row:2}.r3{grid-row:3}.r4{grid-row:4}.r5{grid-row:5}.r6{grid-row:6}.r7{grid-row:7}
 .vs-sel{width:100%;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:-.1px;padding:8px 32px 8px 10px;border:1px solid rgba(0,0,0,.35);border-radius:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6'%3E%3Cpath d='M0 0l4 6 4-6z' fill='%23191919'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--ink);-webkit-appearance:none;appearance:none;cursor:pointer;margin-bottom:14px}
 .vs-sel:hover{border-color:var(--ink)}
 .vs-sel:focus{outline:1px solid var(--accent);outline-offset:1px}
-@media (max-width:640px){.vs{grid-template-columns:1fr}}
-.tool-head{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);padding-bottom:6px;border-bottom:2px solid;margin-bottom:2px}
-.tool-head small{display:block;font-family:var(--mono);font-weight:400;font-size:9.5px;color:var(--ink2);margin-top:3px;letter-spacing:-.1px}
+@media (max-width:640px){.vs{display:block}.vs-side{display:block}.vs-side:first-child{margin-bottom:36px}}
 .pband{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:rgba(25,25,25,.4);margin:16px 0 6px}
 .pbox{border:1px solid rgba(0,0,0,.28);background:#fff;padding:8px 10px}
 .pbox.dashed{border-style:dashed}
@@ -175,27 +177,36 @@ footer a:hover{color:var(--accent);text-decoration:none}
       <figure>
         <figcaption>How each tool builds and queries its semantic layer</figcaption>
         <div class="vs">
-          <div>
-            <select class="vs-sel" id="sel-left" aria-label="Select left tool">
+          <div class="vs-side">
+            <select class="vs-sel r1" id="sel-left" aria-label="Select left tool">
               <option value="cursor" selected>CURSOR</option>
               <option value="devin">DEVIN</option>
               <option value="claude">CLAUDE CODE</option>
             </select>
-            <div id="pane-left"></div>
+            <div class="pband r2">INDEX TIME</div>
+            <div class="r3" id="ix-left"></div>
+            <div class="psteer r4" id="st-left"></div>
+            <div class="pband r5">QUERY TIME</div>
+            <div class="r6" id="qy-left"></div>
+            <div class="pclaim r7" id="cl-left"></div>
           </div>
-          <div>
-            <select class="vs-sel" id="sel-right" aria-label="Select right tool">
+          <div class="vs-side">
+            <select class="vs-sel r1" id="sel-right" aria-label="Select right tool">
               <option value="cursor">CURSOR</option>
               <option value="devin" selected>DEVIN</option>
               <option value="claude">CLAUDE CODE</option>
             </select>
-            <div id="pane-right"></div>
+            <div class="pband r2">INDEX TIME</div>
+            <div class="r3" id="ix-right"></div>
+            <div class="psteer r4" id="st-right"></div>
+            <div class="pband r5">QUERY TIME</div>
+            <div class="r6" id="qy-right"></div>
+            <div class="pclaim r7" id="cl-right"></div>
           </div>
         </div>
 
         <template id="tpl-cursor">
-            <div class="tool-head" style="border-color:#317cff">CURSOR<small>trained embedding index</small></div>
-            <div class="pband">INDEX TIME</div>
+          <div class="t-ix">
             <div class="pbox"><b>AST chunking</b><span>local · syntactic chunks (fn / class level)</span></div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Custom embedding model</b><span>trained on real agent session traces</span></div>
@@ -203,8 +214,9 @@ footer a:hover{color:var(--accent);text-decoration:none}
             <div class="pbox"><b>Merkle-tree sync</b><span>SHA-256 · changed subtrees · re-check ~10 min</span></div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Encrypted cloud index</b><span>vectors + chunks · client-held keys</span></div>
-            <div class="psteer">steering: ignore files only</div>
-            <div class="pband">QUERY TIME</div>
+          </div>
+          <div class="t-steer">steering: ignore files only</div>
+          <div class="t-qy">
             <div class="pbox"><b>Agent — Composer / pinned model</b><span>picks a search tool per step</span></div>
             <div class="parr">↓</div>
             <div class="prow">
@@ -214,19 +226,20 @@ footer a:hover{color:var(--accent);text-decoration:none}
             </div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Fused context</b><span>top-k chunks · decrypted client-side</span></div>
-            <div class="pclaim">vendor eval: +12.5% QA accuracy vs grep-only [1]</div>
+          </div>
+          <div class="t-claim">vendor eval: +12.5% QA accuracy vs grep-only [1]</div>
         </template>
 
         <template id="tpl-devin">
-            <div class="tool-head" style="border-color:#f58e3a">DEVIN<small>generated wiki + agentic search</small></div>
-            <div class="pband">INDEX TIME</div>
+          <div class="t-ix">
             <div class="pbox"><b>Wiki generation</b><span>in Cognition's cloud · reindex ~every 2 h</span></div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Devin Wiki</b><span>architecture pages · diagrams · source-linked</span></div>
             <div class="parr">+</div>
             <div class="pbox dashed"><b>Knowledge</b><span>org / repo notes · trigger-gated mid-session recall</span></div>
-            <div class="psteer">steering: .devin/wiki.json + Knowledge seeding</div>
-            <div class="pband">QUERY TIME</div>
+          </div>
+          <div class="t-steer">steering: .devin/wiki.json + Knowledge seeding</div>
+          <div class="t-qy">
             <div class="pbox"><b>Agent — Devin · SWE-1.7</b><span>plan grounded in wiki + knowledge</span></div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Fast Context subagent</b><span>SWE-grep · RL-trained · grep/read/glob · ≤4 turns</span>
@@ -234,15 +247,16 @@ footer a:hover{color:var(--accent);text-decoration:none}
             </div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Files + line ranges</b><span>precision-weighted · lean context</span></div>
-            <div class="pclaim">vendor eval: retrieval up to 20× faster [4]</div>
+          </div>
+          <div class="t-claim">vendor eval: retrieval up to 20× faster [4]</div>
         </template>
 
         <template id="tpl-claude">
-            <div class="tool-head" style="border-color:#15aabf">CLAUDE CODE<small>no index · pure agentic search</small></div>
-            <div class="pband">INDEX TIME</div>
+          <div class="t-ix">
             <div class="pbox dashed"><b>∅ nothing built</b><span>no embeddings · no wiki · no server-side copy — the repo never leaves your machine</span></div>
-            <div class="psteer">steering: CLAUDE.md · skills · memory — user-written, versioned in-repo</div>
-            <div class="pband">QUERY TIME</div>
+          </div>
+          <div class="t-steer">steering: CLAUDE.md · skills · memory — user-written, versioned in-repo</div>
+          <div class="t-qy">
             <div class="pbox"><b>Agent — frontier Claude model</b><span>drives search itself · no trained retriever</span></div>
             <div class="parr">↓</div>
             <div class="prow">
@@ -252,7 +266,8 @@ footer a:hover{color:var(--accent);text-decoration:none}
             </div>
             <div class="parr">↓</div>
             <div class="pbox"><b>Live file reads</b><span>assembled per query · always current</span></div>
-            <div class="pclaim">vendor position: agentic search replaces indexing [10]</div>
+          </div>
+          <div class="t-claim">vendor position: agentic search replaces indexing [10]</div>
         </template>
 
         <p class="fig-note">Sources: Cursor semsearch + indexing posts [1][2][3]; Cognition SWE-grep + DeepWiki docs [4][5][6]; Anthropic Claude Code best practices [10]. "Vendor eval" claims are internal benchmarks.</p>
@@ -538,13 +553,18 @@ footer a:hover{color:var(--accent);text-decoration:none}
   reduced?draw(9000):requestAnimationFrame(loop);
 })();
 
-/* Interactive pipeline comparator — dropdown per side */
+/* Interactive pipeline comparator — dropdown per side, sections row-aligned */
 (function(){
+  const COLORS={cursor:'#317cff',devin:'#f58e3a',claude:'#15aabf'};
   function render(side){
     const sel=document.getElementById('sel-'+side);
-    const pane=document.getElementById('pane-'+side);
-    if(!sel||!pane)return;
-    pane.innerHTML=document.getElementById('tpl-'+sel.value).innerHTML;
+    if(!sel)return;
+    const t=document.getElementById('tpl-'+sel.value).content;
+    document.getElementById('ix-'+side).innerHTML=t.querySelector('.t-ix').innerHTML;
+    document.getElementById('st-'+side).textContent=t.querySelector('.t-steer').textContent;
+    document.getElementById('qy-'+side).innerHTML=t.querySelector('.t-qy').innerHTML;
+    document.getElementById('cl-'+side).textContent=t.querySelector('.t-claim').textContent;
+    sel.style.borderBottom='2px solid '+COLORS[sel.value];
   }
   ['left','right'].forEach(side=>{
     const sel=document.getElementById('sel-'+side);
